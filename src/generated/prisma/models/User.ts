@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model User
@@ -41,6 +41,7 @@ export type UserMinAggregateOutputType = {
   username: string | null
   email: string | null
   password: string | null
+  display_name: string | null
   giving_budget: number | null
   received_balance: number | null
   created_at: Date | null
@@ -52,6 +53,7 @@ export type UserMaxAggregateOutputType = {
   username: string | null
   email: string | null
   password: string | null
+  display_name: string | null
   giving_budget: number | null
   received_balance: number | null
   created_at: Date | null
@@ -63,6 +65,7 @@ export type UserCountAggregateOutputType = {
   username: number
   email: number
   password: number
+  display_name: number
   giving_budget: number
   received_balance: number
   created_at: number
@@ -86,6 +89,7 @@ export type UserMinAggregateInputType = {
   username?: true
   email?: true
   password?: true
+  display_name?: true
   giving_budget?: true
   received_balance?: true
   created_at?: true
@@ -97,6 +101,7 @@ export type UserMaxAggregateInputType = {
   username?: true
   email?: true
   password?: true
+  display_name?: true
   giving_budget?: true
   received_balance?: true
   created_at?: true
@@ -108,6 +113,7 @@ export type UserCountAggregateInputType = {
   username?: true
   email?: true
   password?: true
+  display_name?: true
   giving_budget?: true
   received_balance?: true
   created_at?: true
@@ -206,6 +212,7 @@ export type UserGroupByOutputType = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget: number
   received_balance: number
   created_at: Date
@@ -240,6 +247,7 @@ export type UserWhereInput = {
   username?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
+  display_name?: Prisma.StringFilter<"User"> | string
   giving_budget?: Prisma.IntFilter<"User"> | number
   received_balance?: Prisma.IntFilter<"User"> | number
   created_at?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -256,6 +264,7 @@ export type UserOrderByWithRelationInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  display_name?: Prisma.SortOrder
   giving_budget?: Prisma.SortOrder
   received_balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -275,6 +284,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   password?: Prisma.StringFilter<"User"> | string
+  display_name?: Prisma.StringFilter<"User"> | string
   giving_budget?: Prisma.IntFilter<"User"> | number
   received_balance?: Prisma.IntFilter<"User"> | number
   created_at?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -291,6 +301,7 @@ export type UserOrderByWithAggregationInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  display_name?: Prisma.SortOrder
   giving_budget?: Prisma.SortOrder
   received_balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -310,6 +321,7 @@ export type UserScalarWhereWithAggregatesInput = {
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
+  display_name?: Prisma.StringWithAggregatesFilter<"User"> | string
   giving_budget?: Prisma.IntWithAggregatesFilter<"User"> | number
   received_balance?: Prisma.IntWithAggregatesFilter<"User"> | number
   created_at?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -321,6 +333,7 @@ export type UserCreateInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -337,6 +350,7 @@ export type UserUncheckedCreateInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -353,6 +367,7 @@ export type UserUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -369,6 +384,7 @@ export type UserUncheckedUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -385,6 +401,7 @@ export type UserCreateManyInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -396,6 +413,7 @@ export type UserUpdateManyMutationInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -407,6 +425,7 @@ export type UserUncheckedUpdateManyInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -418,6 +437,7 @@ export type UserCountOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  display_name?: Prisma.SortOrder
   giving_budget?: Prisma.SortOrder
   received_balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -434,6 +454,7 @@ export type UserMaxOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  display_name?: Prisma.SortOrder
   giving_budget?: Prisma.SortOrder
   received_balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -445,6 +466,7 @@ export type UserMinOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  display_name?: Prisma.SortOrder
   giving_budget?: Prisma.SortOrder
   received_balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -552,6 +574,7 @@ export type UserCreateWithoutKudos_sentInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -567,6 +590,7 @@ export type UserUncheckedCreateWithoutKudos_sentInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -587,6 +611,7 @@ export type UserCreateWithoutKudos_receivedInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -602,6 +627,7 @@ export type UserUncheckedCreateWithoutKudos_receivedInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -633,6 +659,7 @@ export type UserUpdateWithoutKudos_sentInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -648,6 +675,7 @@ export type UserUncheckedUpdateWithoutKudos_sentInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -674,6 +702,7 @@ export type UserUpdateWithoutKudos_receivedInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -689,6 +718,7 @@ export type UserUncheckedUpdateWithoutKudos_receivedInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -704,6 +734,7 @@ export type UserCreateWithoutCommentsInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -719,6 +750,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -750,6 +782,7 @@ export type UserUpdateWithoutCommentsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -765,6 +798,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -780,6 +814,7 @@ export type UserCreateWithoutReactionsInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -795,6 +830,7 @@ export type UserUncheckedCreateWithoutReactionsInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -826,6 +862,7 @@ export type UserUpdateWithoutReactionsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -841,6 +878,7 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -856,6 +894,7 @@ export type UserCreateWithoutRedemptionsInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -871,6 +910,7 @@ export type UserUncheckedCreateWithoutRedemptionsInput = {
   username: string
   email: string
   password: string
+  display_name: string
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -902,6 +942,7 @@ export type UserUpdateWithoutRedemptionsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -917,6 +958,7 @@ export type UserUncheckedUpdateWithoutRedemptionsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.StringFieldUpdateOperationsInput | string
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -999,6 +1041,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   username?: boolean
   email?: boolean
   password?: boolean
+  display_name?: boolean
   giving_budget?: boolean
   received_balance?: boolean
   created_at?: boolean
@@ -1016,6 +1059,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   username?: boolean
   email?: boolean
   password?: boolean
+  display_name?: boolean
   giving_budget?: boolean
   received_balance?: boolean
   created_at?: boolean
@@ -1027,6 +1071,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   username?: boolean
   email?: boolean
   password?: boolean
+  display_name?: boolean
   giving_budget?: boolean
   received_balance?: boolean
   created_at?: boolean
@@ -1038,13 +1083,14 @@ export type UserSelectScalar = {
   username?: boolean
   email?: boolean
   password?: boolean
+  display_name?: boolean
   giving_budget?: boolean
   received_balance?: boolean
   created_at?: boolean
   updated_at?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "password" | "giving_budget" | "received_balance" | "created_at" | "updated_at", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "password" | "display_name" | "giving_budget" | "received_balance" | "created_at" | "updated_at", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   kudos_sent?: boolean | Prisma.User$kudos_sentArgs<ExtArgs>
   kudos_received?: boolean | Prisma.User$kudos_receivedArgs<ExtArgs>
@@ -1070,6 +1116,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     username: string
     email: string
     password: string
+    display_name: string
     giving_budget: number
     received_balance: number
     created_at: Date
@@ -1506,6 +1553,7 @@ export interface UserFieldRefs {
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly display_name: Prisma.FieldRef<"User", 'String'>
   readonly giving_budget: Prisma.FieldRef<"User", 'Int'>
   readonly received_balance: Prisma.FieldRef<"User", 'Int'>
   readonly created_at: Prisma.FieldRef<"User", 'DateTime'>

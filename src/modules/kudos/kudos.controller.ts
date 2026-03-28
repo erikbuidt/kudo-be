@@ -1,0 +1,29 @@
+import { Body, Controller, Get, Post, Query, Request } from '@nestjs/common'
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery, ApiResponse } from '@nestjs/swagger'
+import { KudosService } from './kudos.service'
+import { CreateKudoDto, FeedQueryDto } from './create-kudo.dto'
+
+@ApiTags('Kudos')
+@ApiBearerAuth('access-token')
+@Controller('kudos')
+export class KudosController {
+  constructor(private readonly kudosService: KudosService) {}
+
+  @Post()
+  @ApiOperation({ summary: 'Send a kudo to another user' })
+  @ApiResponse({ status: 201, description: 'Kudo created successfully' })
+  @ApiResponse({ status: 400, description: 'Validation error or insufficient budget' })
+  @ApiResponse({ status: 403, description: 'Insufficient giving budget' })
+  createKudo(@Request() req: { user: { id: string } }, @Body() dto: CreateKudoDto) {
+    return this.kudosService.createKudo(req.user.id, dto)
+  }
+
+  @Get('feed')
+  @ApiOperation({ summary: 'Get paginated kudo feed' })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  @ApiResponse({ status: 200, description: 'Paginated list of kudos with counts' })
+  getFeed(@Query() query: FeedQueryDto) {
+    return this.kudosService.getFeed(query)
+  }
+}

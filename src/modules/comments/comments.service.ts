@@ -1,0 +1,61 @@
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { PrismaService } from '@/package/prisma/prisma.service'
+import { NotificationsGateway } from '../notifications/notifications.gateway'
+import type { CreateCommentDto } from './create-comment.dto'
+
+@Injectable()
+export class CommentsService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsGateway,
+  ) {}
+
+  async addComment(userId: string, dto: CreateCommentDto) {
+    const kudo = await this.prisma.kudo.findUnique({
+      where: { id: dto.kudo_id },
+      select: { id: true, sender_id: true, receiver_id: true },
+    })
+    if (!kudo) throw new NotFoundException('Kudo not found')
+
+    const comment = await this.prisma.comment.create({
+      data: {
+        content: dto.content,
+        media_url: dto.media_url,
+        kudo_id: dto.kudo_id,
+        user_id: userId,
+      },
+      include: {
+        user: { select: { id: true, username: true } },
+      },
+    })
+
+    // Notify kudo participants (excluding the commenter)
+    const notifyIds = new Set([kudo.sender_id, kudo.receiver_id])
+    notifyIds.delete(userId)
+
+    for (const recipientId of notifyIds) {
+      this.notifications.sendToUser(recipientId, {
+        type: 'comment_added',
+        message: `${comment.user.username} commented on a kudo`,
+        data: {
+          comment_id: comment.id,
+          kudo_id: dto.kudo_id,
+          commenter: comment.user,
+          content: dto.content,
+        },
+      })
+    }
+
+    return comment
+  }
+
+  getComments(kudoId: string) {
+    return this.prisma.comment.findMany({
+      where: { kudo_id: kudoId },
+      orderBy: { created_at: 'asc' },
+      include: {
+        user: { select: { id: true, username: true } },
+      },
+    })
+  }
+}

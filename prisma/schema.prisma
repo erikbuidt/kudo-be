@@ -4,8 +4,9 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
@@ -13,10 +14,11 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  username String @unique
-  email    String @unique
-  password String // Store hashed passwords only!
+  id           String  @id @default(uuid())
+  username     String  @unique
+  email        String  @unique
+  password     String // Store hashed passwords only!
+  display_name String?
 
   // The 200 points to give away (Resets monthly)
   giving_budget Int @default(200)

@@ -20,6 +20,13 @@ export interface IConfig {
   app: IConfigApp
   minio: MinioOptions
   database: DatabaseOptions
+  google: GoogleOptions
+}
+
+export interface GoogleOptions {
+  clientId: string
+  clientSecret: string
+  callbackUrl: string
 }
 
 export interface DatabaseOptions {
