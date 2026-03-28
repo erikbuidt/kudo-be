@@ -1,0 +1,142 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String @id @default(uuid())
+  username String @unique
+  email    String @unique
+  password String // Store hashed passwords only!
+
+  // The 200 points to give away (Resets monthly)
+  giving_budget Int @default(200)
+
+  // The points earned to spend on rewards
+  received_balance Int @default(0)
+
+  // Relationships
+  kudos_sent     Kudo[]       @relation("sent_kudos")
+  kudos_received Kudo[]       @relation("received_kudos")
+  comments       Comment[]
+  reactions      Reaction[]
+  redemptions    Redemption[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("users") // Maps the model to the "users" table in Postgres
+}
+
+model Kudo {
+  id          String    @id @default(uuid())
+  points      Int // Logic: 10-50
+  description String    @db.Text
+  core_value  CoreValue
+
+  // Media Handling
+  media_url    String?
+  media_type   MediaType?
+  media_status MediaStatus @default(PENDING)
+
+  // Relationships
+  sender_id   String
+  sender      User   @relation("sent_kudos", fields: [sender_id], references: [id])
+  receiver_id String
+  receiver    User   @relation("received_kudos", fields: [receiver_id], references: [id])
+
+  comments  Comment[]
+  reactions Reaction[]
+
+  created_at DateTime @default(now())
+
+  @@map("kudos")
+}
+
+model Comment {
+  id        String  @id @default(uuid())
+  content   String  @db.Text
+  media_url String?
+
+  kudo_id String
+  kudo    Kudo   @relation(fields: [kudo_id], references: [id])
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  created_at DateTime @default(now())
+
+  @@map("comments")
+}
+
+model Reaction {
+  id    String @id @default(uuid())
+  emoji String
+
+  kudo_id String
+  kudo    Kudo   @relation(fields: [kudo_id], references: [id])
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  @@unique([kudo_id, user_id, emoji])
+  @@map("reactions")
+}
+
+model Reward {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  point_cost  Int
+  stock       Int    @default(0)
+
+  redemptions Redemption[]
+
+  @@map("rewards")
+}
+
+model Redemption {
+  id     String           @id @default(uuid())
+  status RedemptionStatus @default(COMPLETED)
+
+  user_id   String
+  user      User   @relation(fields: [user_id], references: [id])
+  reward_id String
+  reward    Reward @relation(fields: [reward_id], references: [id])
+
+  created_at DateTime @default(now())
+
+  @@map("redemptions")
+}
+
+enum CoreValue {
+  TEAMWORK
+  OWNERSHIP
+  INNOVATION
+  CUSTOMER_FIRST
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum MediaStatus {
+  PENDING
+  PROCESSING
+  READY
+  FAILED
+}
+
+enum RedemptionStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
