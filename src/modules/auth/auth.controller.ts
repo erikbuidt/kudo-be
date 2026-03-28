@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, Get, UseGuards, Request } from '@nestjs/common'
+import { Body, Controller, Post, HttpCode, HttpStatus, Get, UseGuards, Request, Res } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger'
 import { AuthService } from './auth.service'
 import { RegisterDto, LoginDto } from './auth.dto'
@@ -29,6 +29,14 @@ export class AuthController {
     return this.authService.login(dto)
   }
 
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Logout' })
+  @ApiResponse({ status: 200, description: 'Logout successfully' })
+  logout() {
+    return this.authService.logout()
+  }
+
   @Public()
   @UseGuards(GoogleAuthGuard)
   @Get('google')
@@ -41,7 +49,9 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
   @ApiOperation({ summary: 'Handles Google OAuth callback' })
-  googleAuthRedirect(@Request() req: any) {
-    return req.user
+  googleAuthRedirect(@Request() req: any, @Res() res: any) {
+    const { access_token } = req.user
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+    return res.redirect(`${frontendUrl}/auth/callback?access_token=${access_token}`)
   }
 }

@@ -23,4 +23,11 @@ export class RewardsController {
   redeem(@Request() req: { user: { id: string } }, @Body() dto: RedeemRewardDto) {
     return this.rewardsService.redeemReward(req.user.id, dto)
   }
+
+  @Get('redemptions/me')
+  @ApiOperation({ summary: 'Get current user redemptions' })
+  @ApiResponse({ status: 200, description: 'Array of user redemptions' })
+  getMyRedemptions(@Request() req: { user: { id: string } }) {
+    return this.rewardsService.getMyRedemptions(req.user.id)
+  }
 }

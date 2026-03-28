@@ -50,6 +50,10 @@ export class AuthService {
     }
   }
 
+  async logout() {
+    return true
+  }
+
   async validateOAuthLogin(profile: { email: string, displayName: string }) {
     let user = await this.prisma.user.findUnique({ where: { email: profile.email } })
 

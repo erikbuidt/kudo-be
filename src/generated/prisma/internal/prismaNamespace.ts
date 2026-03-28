@@ -1025,7 +1025,8 @@ export const RewardScalarFieldEnum = {
   name: 'name',
   description: 'description',
   point_cost: 'point_cost',
-  stock: 'stock'
+  stock: 'stock',
+  image_url: 'image_url'
 } as const
 
 export type RewardScalarFieldEnum = (typeof RewardScalarFieldEnum)[keyof typeof RewardScalarFieldEnum]

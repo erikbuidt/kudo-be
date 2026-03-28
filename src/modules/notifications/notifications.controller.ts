@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param, Request } from '@nestjs/common'
+import { Controller, Get, Patch, Param, Request, Query } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger'
 import { NotificationsService } from './notifications.service'
 
@@ -6,13 +6,19 @@ import { NotificationsService } from './notifications.service'
 @ApiBearerAuth('access-token')
 @Controller('notifications')
 export class NotificationsController {
-  constructor(private readonly notificationsService: NotificationsService) {}
+  constructor(private readonly notificationsService: NotificationsService) { }
 
   @Get()
   @ApiOperation({ summary: 'Get recent notifications for the current user' })
-  @ApiResponse({ status: 200, description: 'Returns a list of notifications' })
-  getUserNotifications(@Request() req: { user: { id: string } }) {
-    return this.notificationsService.getUserNotifications(req.user.id)
+  @ApiResponse({ status: 200, description: 'Returns a list of notifications with next cursor for pagination' })
+  getUserNotifications(
+    @Request() req: { user: { id: string } },
+    @Query('limit') limit?: string,
+    @Query('page') page?: string,
+  ) {
+    const parsedLimit = limit ? parseInt(limit, 10) : 5;
+    const parsedPage = page ? parseInt(page, 10) : 1;
+    return this.notificationsService.getUserNotifications(req.user.id, parsedLimit, parsedPage);
   }
 
   @Get('unread-count')

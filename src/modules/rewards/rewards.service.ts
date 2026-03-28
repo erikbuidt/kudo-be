@@ -21,7 +21,7 @@ export class RewardsService {
     return this.prisma.$transaction(async (tx) => {
       // Row-level lock on the user row to prevent concurrent double-spends
       const users = await tx.$queryRaw<{ received_balance: number }[]>`
-        SELECT received_balance FROM users WHERE id = ${userId}::uuid FOR UPDATE
+        SELECT received_balance FROM users WHERE id = ${userId} FOR UPDATE
       `
       const user = users[0]
       if (!user) throw new NotFoundException('User not found')
@@ -50,6 +50,14 @@ export class RewardsService {
         data: { user_id: userId, reward_id: dto.reward_id },
         include: { reward: true },
       })
+    })
+  }
+
+  getMyRedemptions(userId: string) {
+    return this.prisma.redemption.findMany({
+      where: { user_id: userId },
+      include: { reward: true },
+      orderBy: { created_at: 'desc' },
     })
   }
 }

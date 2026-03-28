@@ -27,6 +27,13 @@ export class KudosController {
     return this.kudosService.getFeed(query)
   }
 
+  @Get('top-values')
+  @ApiOperation({ summary: 'Get top 3 core values used this week' })
+  @ApiResponse({ status: 200, description: 'List of top core values with counts' })
+  getTopCoreValuesThisWeek() {
+    return this.kudosService.getTopCoreValuesThisWeek()
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a specific kudo' })
   @ApiResponse({ status: 200, description: 'Kudo found' })

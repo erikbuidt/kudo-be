@@ -68,12 +68,19 @@ export class KudosService {
       kudoId: kudo.id,
     })
 
+    // Broadcast to everyone for feed
+    this.notificationsService.broadcastKudo({
+      ...kudo,
+      comments_count: 0,
+      reactions_count: 0,
+    })
+
     return kudo
   }
 
   async getFeed(query: FeedQueryDto) {
     const page = query.page ?? 1
-    const limit = query.limit ?? 10
+    const limit = query.limit ?? 5
     const skip = (page - 1) * limit
 
     const [items, total] = await Promise.all([
@@ -89,7 +96,7 @@ export class KudosService {
       }),
       this.prisma.kudo.count(),
     ])
-
+    await new Promise((resolve) => setTimeout(resolve, 2000))
     return {
       data: items.map((kudo) => ({
         id: kudo.id,
@@ -127,5 +134,42 @@ export class KudosService {
       throw new NotFoundException('Kudo not found')
     }
     return kudo
+  }
+
+  async getTopCoreValuesThisWeek() {
+    const now = new Date();
+    // Start of week (Monday)
+    const startOfWeek = new Date(now);
+    const day = startOfWeek.getDay() || 7; // Convert Sunday (0) to 7
+    startOfWeek.setHours(0, 0, 0, 0);
+    startOfWeek.setDate(now.getDate() - day + 1);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    const results = await this.prisma.kudo.groupBy({
+      by: ['core_value'],
+      where: {
+        created_at: {
+          gte: startOfWeek,
+          lte: endOfWeek,
+        },
+      },
+      _count: {
+        id: true,
+      },
+      orderBy: {
+        _count: {
+          id: 'desc',
+        },
+      },
+      take: 3,
+    });
+
+    return results.map(r => ({
+      core_value: r.core_value,
+      count: r._count.id
+    }));
   }
 }

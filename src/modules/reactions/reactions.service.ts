@@ -30,8 +30,17 @@ export class ReactionsService {
     if (existing) {
       // Remove reaction (toggle off)
       await this.prisma.reaction.delete({ where: { id: existing.id } })
+      
+      this.notificationsService.broadcastReaction({
+        kudo_id: dto.kudo_id,
+        emoji: dto.emoji,
+        action: 'removed',
+        userId,
+      })
+      
       return { action: 'removed', emoji: dto.emoji }
     }
+
 
     // Add reaction (toggle on)
     const reaction = await this.prisma.reaction.create({
@@ -55,6 +64,13 @@ export class ReactionsService {
         kudoId: dto.kudo_id,
       })
     }
+
+    this.notificationsService.broadcastReaction({
+      kudo_id: dto.kudo_id,
+      emoji: dto.emoji,
+      action: 'added',
+      userId,
+    })
 
     return { action: 'added', reaction }
   }

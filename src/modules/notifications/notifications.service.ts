@@ -8,7 +8,7 @@ export class NotificationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationsGateway: NotificationsGateway,
-  ) {}
+  ) { }
 
   /**
    * Creates a notification in the DB and pushes it to the user via WebSocket
@@ -31,11 +31,11 @@ export class NotificationsService {
 
     // 2. Push real-time event
     this.notificationsGateway.sendToUser(data.userId, {
-      type: data.type === 'KUDO_RECEIVED' 
-        ? 'kudo_received' 
+      type: data.type === 'KUDO_RECEIVED'
+        ? 'kudo_received'
         : data.type === 'COMMENT_ON_KUDO'
-        ? 'comment_added'
-        : 'reaction_added',
+          ? 'comment_added'
+          : 'reaction_added',
       message: data.message,
       data: {
         notification_id: notification.id,
@@ -46,17 +46,43 @@ export class NotificationsService {
     return notification
   }
 
-  async getUserNotifications(userId: string, limit = 20) {
-    return this.prisma.notification.findMany({
-      where: { user_id: userId },
-      orderBy: { created_at: 'desc' },
-      take: limit,
-      include: {
-        kudo: {
-          select: { id: true, points: true, description: true },
+  broadcastKudo(kudo: any) {
+    this.notificationsGateway.broadcastKudo(kudo)
+  }
+
+  broadcastReaction(data: any) {
+    this.notificationsGateway.broadcastReaction(data)
+  }
+
+
+
+  async getUserNotifications(userId: string, limit = 20, page = 1) {
+    const skip = (page - 1) * limit
+    const [items, total] = await Promise.all([
+      this.prisma.notification.findMany({
+        skip,
+        take: limit,
+        orderBy: { created_at: 'desc' },
+        where: { user_id: userId },
+        include: {
+          kudo: {
+            select: { id: true, points: true, description: true },
+          },
         },
+      }),
+      this.prisma.notification.count({ where: { user_id: userId } }),
+    ])
+
+    return {
+      data: items,
+      meta: {
+        total_items: total,
+        items_per_page: limit,
+        current_page: page,
+        total_pages: Math.ceil(total / limit),
+        item_count: items.length,
       },
-    })
+    };
   }
 
   async markAsRead(userId: string, notificationId: string) {

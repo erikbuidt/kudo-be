@@ -54,4 +54,16 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
   sendToUser(userId: string, payload: NotificationPayload) {
     this.server.to(`user:${userId}`).emit('notification', payload)
   }
+
+  /** Broadcast a new kudo to all connected clients for the public feed */
+  broadcastKudo(kudo: any) {
+    this.server.emit('kudo_created', kudo)
+  }
+
+  /** Broadcast a reaction update to all connected clients */
+  broadcastReaction(data: { kudo_id: string; emoji: string; action: 'added' | 'removed'; userId: string }) {
+    this.server.emit('reaction_updated', data)
+  }
 }
+
+
