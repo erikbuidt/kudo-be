@@ -22,7 +22,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
 
   private readonly logger = new Logger(NotificationsGateway.name)
 
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService) { }
 
   async handleConnection(socket: Socket) {
     try {
@@ -34,7 +34,6 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
 
       socket.data.userId = userId
 
-      // Joining the room is all we need. 
       // The Redis adapter will automatically pub/sub to this room across all server instances!
       socket.join(`user:${userId}`)
       this.logger.log(`User ${userId} connected (socketId=${socket.id})`)

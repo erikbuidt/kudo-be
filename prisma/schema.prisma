@@ -32,6 +32,7 @@ model User {
   comments       Comment[]
   reactions      Reaction[]
   redemptions    Redemption[]
+  notifications  Notification[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -56,8 +57,9 @@ model Kudo {
   receiver_id String
   receiver    User   @relation("received_kudos", fields: [receiver_id], references: [id])
 
-  comments  Comment[]
-  reactions Reaction[]
+  comments      Comment[]
+  reactions     Reaction[]
+  notifications Notification[]
 
   created_at DateTime @default(now())
 
@@ -141,4 +143,28 @@ enum RedemptionStatus {
   PENDING
   COMPLETED
   CANCELLED
+}
+
+model Notification {
+  id           String   @id @default(uuid())
+  user_id      String   // The person receiving the alert
+  user         User     @relation(fields: [user_id], references: [id])
+  
+  type         NotificationType
+  message      String
+  is_read      Boolean  @default(false)
+  
+  // Link to the specific Kudo so they can click to view it
+  kudo_id      String?
+  kudo         Kudo?    @relation(fields: [kudo_id], references: [id])
+
+  created_at   DateTime @default(now())
+
+  @@map("notifications")
+}
+
+enum NotificationType {
+  KUDO_RECEIVED
+  COMMENT_ON_KUDO
+  REACTION_ON_KUDO
 }

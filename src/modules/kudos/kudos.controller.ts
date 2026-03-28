@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Request } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Query, Request } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery, ApiResponse } from '@nestjs/swagger'
 import { KudosService } from './kudos.service'
 import { CreateKudoDto, FeedQueryDto } from './create-kudo.dto'
@@ -7,7 +7,7 @@ import { CreateKudoDto, FeedQueryDto } from './create-kudo.dto'
 @ApiBearerAuth('access-token')
 @Controller('kudos')
 export class KudosController {
-  constructor(private readonly kudosService: KudosService) {}
+  constructor(private readonly kudosService: KudosService) { }
 
   @Post()
   @ApiOperation({ summary: 'Send a kudo to another user' })
@@ -25,5 +25,13 @@ export class KudosController {
   @ApiResponse({ status: 200, description: 'Paginated list of kudos with counts' })
   getFeed(@Query() query: FeedQueryDto) {
     return this.kudosService.getFeed(query)
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a specific kudo' })
+  @ApiResponse({ status: 200, description: 'Kudo found' })
+  @ApiResponse({ status: 404, description: 'Kudo not found' })
+  getKudo(@Param('id') id: string) {
+    return this.kudosService.getKudo(id)
   }
 }

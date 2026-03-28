@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '@/package/prisma/prisma.service'
-import { NotificationsGateway } from '../notifications/notifications.gateway'
+import { NotificationsService } from '../notifications/notifications.service'
 import type { ToggleReactionDto } from './toggle-reaction.dto'
 
 @Injectable()
 export class ReactionsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly notifications: NotificationsGateway,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async toggleReaction(userId: string, dto: ToggleReactionDto) {
@@ -48,15 +48,11 @@ export class ReactionsService {
     notifyIds.delete(userId)
 
     for (const recipientId of notifyIds) {
-      this.notifications.sendToUser(recipientId, {
-        type: 'reaction_added',
+      this.notificationsService.createNotification({
+        userId: recipientId,
+        type: 'REACTION_ON_KUDO',
         message: `${reaction.user.username} reacted with ${dto.emoji} to a kudo`,
-        data: {
-          reaction_id: reaction.id,
-          kudo_id: dto.kudo_id,
-          reacter: reaction.user,
-          emoji: dto.emoji,
-        },
+        kudoId: dto.kudo_id,
       })
     }
 

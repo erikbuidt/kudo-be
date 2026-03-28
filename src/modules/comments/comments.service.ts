@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '@/package/prisma/prisma.service'
-import { NotificationsGateway } from '../notifications/notifications.gateway'
+import { NotificationsService } from '../notifications/notifications.service'
 import type { CreateCommentDto } from './create-comment.dto'
 
 @Injectable()
 export class CommentsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly notifications: NotificationsGateway,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async addComment(userId: string, dto: CreateCommentDto) {
@@ -34,15 +34,11 @@ export class CommentsService {
     notifyIds.delete(userId)
 
     for (const recipientId of notifyIds) {
-      this.notifications.sendToUser(recipientId, {
-        type: 'comment_added',
+      this.notificationsService.createNotification({
+        userId: recipientId,
+        type: 'COMMENT_ON_KUDO',
         message: `${comment.user.username} commented on a kudo`,
-        data: {
-          comment_id: comment.id,
-          kudo_id: dto.kudo_id,
-          commenter: comment.user,
-          content: dto.content,
-        },
+        kudoId: dto.kudo_id,
       })
     }
 

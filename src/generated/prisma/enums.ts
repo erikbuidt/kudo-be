@@ -44,3 +44,12 @@ export const RedemptionStatus = {
 } as const
 
 export type RedemptionStatus = (typeof RedemptionStatus)[keyof typeof RedemptionStatus]
+
+
+export const NotificationType = {
+  KUDO_RECEIVED: 'KUDO_RECEIVED',
+  COMMENT_ON_KUDO: 'COMMENT_ON_KUDO',
+  REACTION_ON_KUDO: 'REACTION_ON_KUDO'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

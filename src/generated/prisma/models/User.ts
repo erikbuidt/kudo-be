@@ -212,7 +212,7 @@ export type UserGroupByOutputType = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name: string | null
   giving_budget: number
   received_balance: number
   created_at: Date
@@ -247,7 +247,7 @@ export type UserWhereInput = {
   username?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
-  display_name?: Prisma.StringFilter<"User"> | string
+  display_name?: Prisma.StringNullableFilter<"User"> | string | null
   giving_budget?: Prisma.IntFilter<"User"> | number
   received_balance?: Prisma.IntFilter<"User"> | number
   created_at?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -257,6 +257,7 @@ export type UserWhereInput = {
   comments?: Prisma.CommentListRelationFilter
   reactions?: Prisma.ReactionListRelationFilter
   redemptions?: Prisma.RedemptionListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -264,7 +265,7 @@ export type UserOrderByWithRelationInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  display_name?: Prisma.SortOrder
+  display_name?: Prisma.SortOrderInput | Prisma.SortOrder
   giving_budget?: Prisma.SortOrder
   received_balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -274,6 +275,7 @@ export type UserOrderByWithRelationInput = {
   comments?: Prisma.CommentOrderByRelationAggregateInput
   reactions?: Prisma.ReactionOrderByRelationAggregateInput
   redemptions?: Prisma.RedemptionOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -284,7 +286,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   password?: Prisma.StringFilter<"User"> | string
-  display_name?: Prisma.StringFilter<"User"> | string
+  display_name?: Prisma.StringNullableFilter<"User"> | string | null
   giving_budget?: Prisma.IntFilter<"User"> | number
   received_balance?: Prisma.IntFilter<"User"> | number
   created_at?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -294,6 +296,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   comments?: Prisma.CommentListRelationFilter
   reactions?: Prisma.ReactionListRelationFilter
   redemptions?: Prisma.RedemptionListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id" | "username" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -301,7 +304,7 @@ export type UserOrderByWithAggregationInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  display_name?: Prisma.SortOrder
+  display_name?: Prisma.SortOrderInput | Prisma.SortOrder
   giving_budget?: Prisma.SortOrder
   received_balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -321,7 +324,7 @@ export type UserScalarWhereWithAggregatesInput = {
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
-  display_name?: Prisma.StringWithAggregatesFilter<"User"> | string
+  display_name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   giving_budget?: Prisma.IntWithAggregatesFilter<"User"> | number
   received_balance?: Prisma.IntWithAggregatesFilter<"User"> | number
   created_at?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -333,7 +336,7 @@ export type UserCreateInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -343,6 +346,7 @@ export type UserCreateInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -350,7 +354,7 @@ export type UserUncheckedCreateInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -360,6 +364,7 @@ export type UserUncheckedCreateInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -367,7 +372,7 @@ export type UserUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -377,6 +382,7 @@ export type UserUpdateInput = {
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -384,7 +390,7 @@ export type UserUncheckedUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -394,6 +400,7 @@ export type UserUncheckedUpdateInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -401,7 +408,7 @@ export type UserCreateManyInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -413,7 +420,7 @@ export type UserUpdateManyMutationInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -425,7 +432,7 @@ export type UserUncheckedUpdateManyInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -485,6 +492,10 @@ export type UserScalarRelationFilter = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -569,12 +580,26 @@ export type UserUpdateOneRequiredWithoutRedemptionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRedemptionsInput, Prisma.UserUpdateWithoutRedemptionsInput>, Prisma.UserUncheckedUpdateWithoutRedemptionsInput>
 }
 
+export type UserCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.UserUpsertWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type UserCreateWithoutKudos_sentInput = {
   id?: string
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -583,6 +608,7 @@ export type UserCreateWithoutKudos_sentInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutKudos_sentInput = {
@@ -590,7 +616,7 @@ export type UserUncheckedCreateWithoutKudos_sentInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -599,6 +625,7 @@ export type UserUncheckedCreateWithoutKudos_sentInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutKudos_sentInput = {
@@ -611,7 +638,7 @@ export type UserCreateWithoutKudos_receivedInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -620,6 +647,7 @@ export type UserCreateWithoutKudos_receivedInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutKudos_receivedInput = {
@@ -627,7 +655,7 @@ export type UserUncheckedCreateWithoutKudos_receivedInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -636,6 +664,7 @@ export type UserUncheckedCreateWithoutKudos_receivedInput = {
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutKudos_receivedInput = {
@@ -659,7 +688,7 @@ export type UserUpdateWithoutKudos_sentInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -668,6 +697,7 @@ export type UserUpdateWithoutKudos_sentInput = {
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutKudos_sentInput = {
@@ -675,7 +705,7 @@ export type UserUncheckedUpdateWithoutKudos_sentInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -684,6 +714,7 @@ export type UserUncheckedUpdateWithoutKudos_sentInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutKudos_receivedInput = {
@@ -702,7 +733,7 @@ export type UserUpdateWithoutKudos_receivedInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -711,6 +742,7 @@ export type UserUpdateWithoutKudos_receivedInput = {
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutKudos_receivedInput = {
@@ -718,7 +750,7 @@ export type UserUncheckedUpdateWithoutKudos_receivedInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -727,6 +759,7 @@ export type UserUncheckedUpdateWithoutKudos_receivedInput = {
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -734,7 +767,7 @@ export type UserCreateWithoutCommentsInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -743,6 +776,7 @@ export type UserCreateWithoutCommentsInput = {
   kudos_received?: Prisma.KudoCreateNestedManyWithoutReceiverInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -750,7 +784,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -759,6 +793,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   kudos_received?: Prisma.KudoUncheckedCreateNestedManyWithoutReceiverInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -782,7 +817,7 @@ export type UserUpdateWithoutCommentsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -791,6 +826,7 @@ export type UserUpdateWithoutCommentsInput = {
   kudos_received?: Prisma.KudoUpdateManyWithoutReceiverNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -798,7 +834,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -807,6 +843,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   kudos_received?: Prisma.KudoUncheckedUpdateManyWithoutReceiverNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReactionsInput = {
@@ -814,7 +851,7 @@ export type UserCreateWithoutReactionsInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -823,6 +860,7 @@ export type UserCreateWithoutReactionsInput = {
   kudos_received?: Prisma.KudoCreateNestedManyWithoutReceiverInput
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReactionsInput = {
@@ -830,7 +868,7 @@ export type UserUncheckedCreateWithoutReactionsInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -839,6 +877,7 @@ export type UserUncheckedCreateWithoutReactionsInput = {
   kudos_received?: Prisma.KudoUncheckedCreateNestedManyWithoutReceiverInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReactionsInput = {
@@ -862,7 +901,7 @@ export type UserUpdateWithoutReactionsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -871,6 +910,7 @@ export type UserUpdateWithoutReactionsInput = {
   kudos_received?: Prisma.KudoUpdateManyWithoutReceiverNestedInput
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReactionsInput = {
@@ -878,7 +918,7 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -887,6 +927,7 @@ export type UserUncheckedUpdateWithoutReactionsInput = {
   kudos_received?: Prisma.KudoUncheckedUpdateManyWithoutReceiverNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRedemptionsInput = {
@@ -894,7 +935,7 @@ export type UserCreateWithoutRedemptionsInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -903,6 +944,7 @@ export type UserCreateWithoutRedemptionsInput = {
   kudos_received?: Prisma.KudoCreateNestedManyWithoutReceiverInput
   comments?: Prisma.CommentCreateNestedManyWithoutUserInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRedemptionsInput = {
@@ -910,7 +952,7 @@ export type UserUncheckedCreateWithoutRedemptionsInput = {
   username: string
   email: string
   password: string
-  display_name: string
+  display_name?: string | null
   giving_budget?: number
   received_balance?: number
   created_at?: Date | string
@@ -919,6 +961,7 @@ export type UserUncheckedCreateWithoutRedemptionsInput = {
   kudos_received?: Prisma.KudoUncheckedCreateNestedManyWithoutReceiverInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRedemptionsInput = {
@@ -942,7 +985,7 @@ export type UserUpdateWithoutRedemptionsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -951,6 +994,7 @@ export type UserUpdateWithoutRedemptionsInput = {
   kudos_received?: Prisma.KudoUpdateManyWithoutReceiverNestedInput
   comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRedemptionsInput = {
@@ -958,7 +1002,7 @@ export type UserUncheckedUpdateWithoutRedemptionsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  display_name?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
   received_balance?: Prisma.IntFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -967,6 +1011,91 @@ export type UserUncheckedUpdateWithoutRedemptionsInput = {
   kudos_received?: Prisma.KudoUncheckedUpdateManyWithoutReceiverNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutNotificationsInput = {
+  id?: string
+  username: string
+  email: string
+  password: string
+  display_name?: string | null
+  giving_budget?: number
+  received_balance?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  kudos_sent?: Prisma.KudoCreateNestedManyWithoutSenderInput
+  kudos_received?: Prisma.KudoCreateNestedManyWithoutReceiverInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutUserInput
+  redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  username: string
+  email: string
+  password: string
+  display_name?: string | null
+  giving_budget?: number
+  received_balance?: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  kudos_sent?: Prisma.KudoUncheckedCreateNestedManyWithoutSenderInput
+  kudos_received?: Prisma.KudoUncheckedCreateNestedManyWithoutReceiverInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutUserInput
+  redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+}
+
+export type UserUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
+  received_balance?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  kudos_sent?: Prisma.KudoUpdateManyWithoutSenderNestedInput
+  kudos_received?: Prisma.KudoUpdateManyWithoutReceiverNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutUserNestedInput
+  redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  display_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  giving_budget?: Prisma.IntFieldUpdateOperationsInput | number
+  received_balance?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  kudos_sent?: Prisma.KudoUncheckedUpdateManyWithoutSenderNestedInput
+  kudos_received?: Prisma.KudoUncheckedUpdateManyWithoutReceiverNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutUserNestedInput
+  redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -980,6 +1109,7 @@ export type UserCountOutputType = {
   comments: number
   reactions: number
   redemptions: number
+  notifications: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -988,6 +1118,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   comments?: boolean | UserCountOutputTypeCountCommentsArgs
   reactions?: boolean | UserCountOutputTypeCountReactionsArgs
   redemptions?: boolean | UserCountOutputTypeCountRedemptionsArgs
+  notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
 }
 
 /**
@@ -1035,6 +1166,13 @@ export type UserCountOutputTypeCountRedemptionsArgs<ExtArgs extends runtime.Type
   where?: Prisma.RedemptionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1051,6 +1189,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   reactions?: boolean | Prisma.User$reactionsArgs<ExtArgs>
   redemptions?: boolean | Prisma.User$redemptionsArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1097,6 +1236,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   reactions?: boolean | Prisma.User$reactionsArgs<ExtArgs>
   redemptions?: boolean | Prisma.User$redemptionsArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1110,13 +1250,14 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     comments: Prisma.$CommentPayload<ExtArgs>[]
     reactions: Prisma.$ReactionPayload<ExtArgs>[]
     redemptions: Prisma.$RedemptionPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     username: string
     email: string
     password: string
-    display_name: string
+    display_name: string | null
     giving_budget: number
     received_balance: number
     created_at: Date
@@ -1520,6 +1661,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   comments<T extends Prisma.User$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reactions<T extends Prisma.User$reactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   redemptions<T extends Prisma.User$redemptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$redemptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RedemptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2068,6 +2210,30 @@ export type User$redemptionsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.RedemptionScalarFieldEnum | Prisma.RedemptionScalarFieldEnum[]
+}
+
+/**
+ * User.notifications
+ */
+export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

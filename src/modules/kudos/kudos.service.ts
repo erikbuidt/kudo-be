@@ -6,10 +6,14 @@ import {
 } from '@nestjs/common'
 import { PrismaService } from '@/package/prisma/prisma.service'
 import type { CreateKudoDto, FeedQueryDto } from './create-kudo.dto'
+import { NotificationsService } from '../notifications/notifications.service'
 
 @Injectable()
 export class KudosService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationsService: NotificationsService,
+  ) { }
 
   async createKudo(senderId: string, dto: CreateKudoDto) {
     if (senderId === dto.receiver_id) {
@@ -56,6 +60,14 @@ export class KudosService {
       })
     })
 
+    // Notify receiver
+    await this.notificationsService.createNotification({
+      userId: dto.receiver_id,
+      type: 'KUDO_RECEIVED',
+      message: `${kudo.sender.username} sent you a kudo`,
+      kudoId: kudo.id,
+    })
+
     return kudo
   }
 
@@ -100,5 +112,20 @@ export class KudosService {
         item_count: items.length,
       },
     }
+  }
+
+  async getKudo(id: string) {
+    const kudo = await this.prisma.kudo.findUnique({
+      where: { id },
+      include: {
+        sender: { select: { id: true, username: true } },
+        receiver: { select: { id: true, username: true } },
+        _count: { select: { comments: true, reactions: true } },
+      },
+    })
+    if (!kudo) {
+      throw new NotFoundException('Kudo not found')
+    }
+    return kudo
   }
 }

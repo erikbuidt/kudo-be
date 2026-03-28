@@ -69,3 +69,8 @@ export type Reward = Prisma.RewardModel
  * 
  */
 export type Redemption = Prisma.RedemptionModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppInterceptor } from '@/common/interceptors/app.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RedisIoAdapter } from '@/common/adapters/redis-io.adapter';
-
+import { httpLogger } from "http-system-logger"
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -12,6 +12,14 @@ async function bootstrap() {
   const redisIoAdapter = new RedisIoAdapter(app);
   await redisIoAdapter.connectToRedis();
   app.useWebSocketAdapter(redisIoAdapter);
+
+  app.enableCors({
+    origin: true, // Allow all origins (safe for development with localhost)
+    credentials: true,
+  });
+
+  app.use(httpLogger)
+
 
   app.useGlobalPipes(
     new ValidationPipe({

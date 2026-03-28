@@ -56,7 +56,8 @@ export const ModelName = {
   Comment: 'Comment',
   Reaction: 'Reaction',
   Reward: 'Reward',
-  Redemption: 'Redemption'
+  Redemption: 'Redemption',
+  Notification: 'Notification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -148,6 +149,19 @@ export const RedemptionScalarFieldEnum = {
 } as const
 
 export type RedemptionScalarFieldEnum = (typeof RedemptionScalarFieldEnum)[keyof typeof RedemptionScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  type: 'type',
+  message: 'message',
+  is_read: 'is_read',
+  kudo_id: 'kudo_id',
+  created_at: 'created_at'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -260,6 +260,7 @@ export type KudoWhereInput = {
   receiver?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   comments?: Prisma.CommentListRelationFilter
   reactions?: Prisma.ReactionListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type KudoOrderByWithRelationInput = {
@@ -277,6 +278,7 @@ export type KudoOrderByWithRelationInput = {
   receiver?: Prisma.UserOrderByWithRelationInput
   comments?: Prisma.CommentOrderByRelationAggregateInput
   reactions?: Prisma.ReactionOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
 }
 
 export type KudoWhereUniqueInput = Prisma.AtLeast<{
@@ -297,6 +299,7 @@ export type KudoWhereUniqueInput = Prisma.AtLeast<{
   receiver?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   comments?: Prisma.CommentListRelationFilter
   reactions?: Prisma.ReactionListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id">
 
 export type KudoOrderByWithAggregationInput = {
@@ -346,6 +349,7 @@ export type KudoCreateInput = {
   receiver: Prisma.UserCreateNestedOneWithoutKudos_receivedInput
   comments?: Prisma.CommentCreateNestedManyWithoutKudoInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutKudoInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutKudoInput
 }
 
 export type KudoUncheckedCreateInput = {
@@ -361,6 +365,7 @@ export type KudoUncheckedCreateInput = {
   created_at?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutKudoInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutKudoInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutKudoInput
 }
 
 export type KudoUpdateInput = {
@@ -376,6 +381,7 @@ export type KudoUpdateInput = {
   receiver?: Prisma.UserUpdateOneRequiredWithoutKudos_receivedNestedInput
   comments?: Prisma.CommentUpdateManyWithoutKudoNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutKudoNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutKudoNestedInput
 }
 
 export type KudoUncheckedUpdateInput = {
@@ -391,6 +397,7 @@ export type KudoUncheckedUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutKudoNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutKudoNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutKudoNestedInput
 }
 
 export type KudoCreateManyInput = {
@@ -492,6 +499,11 @@ export type KudoScalarRelationFilter = {
   isNot?: Prisma.KudoWhereInput
 }
 
+export type KudoNullableScalarRelationFilter = {
+  is?: Prisma.KudoWhereInput | null
+  isNot?: Prisma.KudoWhereInput | null
+}
+
 export type KudoCreateNestedManyWithoutSenderInput = {
   create?: Prisma.XOR<Prisma.KudoCreateWithoutSenderInput, Prisma.KudoUncheckedCreateWithoutSenderInput> | Prisma.KudoCreateWithoutSenderInput[] | Prisma.KudoUncheckedCreateWithoutSenderInput[]
   connectOrCreate?: Prisma.KudoCreateOrConnectWithoutSenderInput | Prisma.KudoCreateOrConnectWithoutSenderInput[]
@@ -580,10 +592,6 @@ export type EnumCoreValueFieldUpdateOperationsInput = {
   set?: $Enums.CoreValue
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type NullableEnumMediaTypeFieldUpdateOperationsInput = {
   set?: $Enums.MediaType | null
 }
@@ -620,6 +628,22 @@ export type KudoUpdateOneRequiredWithoutReactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.KudoUpdateToOneWithWhereWithoutReactionsInput, Prisma.KudoUpdateWithoutReactionsInput>, Prisma.KudoUncheckedUpdateWithoutReactionsInput>
 }
 
+export type KudoCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.KudoCreateWithoutNotificationsInput, Prisma.KudoUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.KudoCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.KudoWhereUniqueInput
+}
+
+export type KudoUpdateOneWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.KudoCreateWithoutNotificationsInput, Prisma.KudoUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.KudoCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.KudoUpsertWithoutNotificationsInput
+  disconnect?: Prisma.KudoWhereInput | boolean
+  delete?: Prisma.KudoWhereInput | boolean
+  connect?: Prisma.KudoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.KudoUpdateToOneWithWhereWithoutNotificationsInput, Prisma.KudoUpdateWithoutNotificationsInput>, Prisma.KudoUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type KudoCreateWithoutSenderInput = {
   id?: string
   points: number
@@ -632,6 +656,7 @@ export type KudoCreateWithoutSenderInput = {
   receiver: Prisma.UserCreateNestedOneWithoutKudos_receivedInput
   comments?: Prisma.CommentCreateNestedManyWithoutKudoInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutKudoInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutKudoInput
 }
 
 export type KudoUncheckedCreateWithoutSenderInput = {
@@ -646,6 +671,7 @@ export type KudoUncheckedCreateWithoutSenderInput = {
   created_at?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutKudoInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutKudoInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutKudoInput
 }
 
 export type KudoCreateOrConnectWithoutSenderInput = {
@@ -670,6 +696,7 @@ export type KudoCreateWithoutReceiverInput = {
   sender: Prisma.UserCreateNestedOneWithoutKudos_sentInput
   comments?: Prisma.CommentCreateNestedManyWithoutKudoInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutKudoInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutKudoInput
 }
 
 export type KudoUncheckedCreateWithoutReceiverInput = {
@@ -684,6 +711,7 @@ export type KudoUncheckedCreateWithoutReceiverInput = {
   created_at?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutKudoInput
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutKudoInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutKudoInput
 }
 
 export type KudoCreateOrConnectWithoutReceiverInput = {
@@ -756,6 +784,7 @@ export type KudoCreateWithoutCommentsInput = {
   sender: Prisma.UserCreateNestedOneWithoutKudos_sentInput
   receiver: Prisma.UserCreateNestedOneWithoutKudos_receivedInput
   reactions?: Prisma.ReactionCreateNestedManyWithoutKudoInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutKudoInput
 }
 
 export type KudoUncheckedCreateWithoutCommentsInput = {
@@ -770,6 +799,7 @@ export type KudoUncheckedCreateWithoutCommentsInput = {
   receiver_id: string
   created_at?: Date | string
   reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutKudoInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutKudoInput
 }
 
 export type KudoCreateOrConnectWithoutCommentsInput = {
@@ -800,6 +830,7 @@ export type KudoUpdateWithoutCommentsInput = {
   sender?: Prisma.UserUpdateOneRequiredWithoutKudos_sentNestedInput
   receiver?: Prisma.UserUpdateOneRequiredWithoutKudos_receivedNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutKudoNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutKudoNestedInput
 }
 
 export type KudoUncheckedUpdateWithoutCommentsInput = {
@@ -814,6 +845,7 @@ export type KudoUncheckedUpdateWithoutCommentsInput = {
   receiver_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutKudoNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutKudoNestedInput
 }
 
 export type KudoCreateWithoutReactionsInput = {
@@ -828,6 +860,7 @@ export type KudoCreateWithoutReactionsInput = {
   sender: Prisma.UserCreateNestedOneWithoutKudos_sentInput
   receiver: Prisma.UserCreateNestedOneWithoutKudos_receivedInput
   comments?: Prisma.CommentCreateNestedManyWithoutKudoInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutKudoInput
 }
 
 export type KudoUncheckedCreateWithoutReactionsInput = {
@@ -842,6 +875,7 @@ export type KudoUncheckedCreateWithoutReactionsInput = {
   receiver_id: string
   created_at?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutKudoInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutKudoInput
 }
 
 export type KudoCreateOrConnectWithoutReactionsInput = {
@@ -872,6 +906,7 @@ export type KudoUpdateWithoutReactionsInput = {
   sender?: Prisma.UserUpdateOneRequiredWithoutKudos_sentNestedInput
   receiver?: Prisma.UserUpdateOneRequiredWithoutKudos_receivedNestedInput
   comments?: Prisma.CommentUpdateManyWithoutKudoNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutKudoNestedInput
 }
 
 export type KudoUncheckedUpdateWithoutReactionsInput = {
@@ -886,6 +921,83 @@ export type KudoUncheckedUpdateWithoutReactionsInput = {
   receiver_id?: Prisma.StringFieldUpdateOperationsInput | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutKudoNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutKudoNestedInput
+}
+
+export type KudoCreateWithoutNotificationsInput = {
+  id?: string
+  points: number
+  description: string
+  core_value: $Enums.CoreValue
+  media_url?: string | null
+  media_type?: $Enums.MediaType | null
+  media_status?: $Enums.MediaStatus
+  created_at?: Date | string
+  sender: Prisma.UserCreateNestedOneWithoutKudos_sentInput
+  receiver: Prisma.UserCreateNestedOneWithoutKudos_receivedInput
+  comments?: Prisma.CommentCreateNestedManyWithoutKudoInput
+  reactions?: Prisma.ReactionCreateNestedManyWithoutKudoInput
+}
+
+export type KudoUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  points: number
+  description: string
+  core_value: $Enums.CoreValue
+  media_url?: string | null
+  media_type?: $Enums.MediaType | null
+  media_status?: $Enums.MediaStatus
+  sender_id: string
+  receiver_id: string
+  created_at?: Date | string
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutKudoInput
+  reactions?: Prisma.ReactionUncheckedCreateNestedManyWithoutKudoInput
+}
+
+export type KudoCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.KudoWhereUniqueInput
+  create: Prisma.XOR<Prisma.KudoCreateWithoutNotificationsInput, Prisma.KudoUncheckedCreateWithoutNotificationsInput>
+}
+
+export type KudoUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.KudoUpdateWithoutNotificationsInput, Prisma.KudoUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.KudoCreateWithoutNotificationsInput, Prisma.KudoUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.KudoWhereInput
+}
+
+export type KudoUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.KudoWhereInput
+  data: Prisma.XOR<Prisma.KudoUpdateWithoutNotificationsInput, Prisma.KudoUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type KudoUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  core_value?: Prisma.EnumCoreValueFieldUpdateOperationsInput | $Enums.CoreValue
+  media_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  media_type?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  media_status?: Prisma.EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sender?: Prisma.UserUpdateOneRequiredWithoutKudos_sentNestedInput
+  receiver?: Prisma.UserUpdateOneRequiredWithoutKudos_receivedNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutKudoNestedInput
+  reactions?: Prisma.ReactionUpdateManyWithoutKudoNestedInput
+}
+
+export type KudoUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  core_value?: Prisma.EnumCoreValueFieldUpdateOperationsInput | $Enums.CoreValue
+  media_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  media_type?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  media_status?: Prisma.EnumMediaStatusFieldUpdateOperationsInput | $Enums.MediaStatus
+  sender_id?: Prisma.StringFieldUpdateOperationsInput | string
+  receiver_id?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutKudoNestedInput
+  reactions?: Prisma.ReactionUncheckedUpdateManyWithoutKudoNestedInput
 }
 
 export type KudoCreateManySenderInput = {
@@ -924,6 +1036,7 @@ export type KudoUpdateWithoutSenderInput = {
   receiver?: Prisma.UserUpdateOneRequiredWithoutKudos_receivedNestedInput
   comments?: Prisma.CommentUpdateManyWithoutKudoNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutKudoNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutKudoNestedInput
 }
 
 export type KudoUncheckedUpdateWithoutSenderInput = {
@@ -938,6 +1051,7 @@ export type KudoUncheckedUpdateWithoutSenderInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutKudoNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutKudoNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutKudoNestedInput
 }
 
 export type KudoUncheckedUpdateManyWithoutSenderInput = {
@@ -964,6 +1078,7 @@ export type KudoUpdateWithoutReceiverInput = {
   sender?: Prisma.UserUpdateOneRequiredWithoutKudos_sentNestedInput
   comments?: Prisma.CommentUpdateManyWithoutKudoNestedInput
   reactions?: Prisma.ReactionUpdateManyWithoutKudoNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutKudoNestedInput
 }
 
 export type KudoUncheckedUpdateWithoutReceiverInput = {
@@ -978,6 +1093,7 @@ export type KudoUncheckedUpdateWithoutReceiverInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutKudoNestedInput
   reactions?: Prisma.ReactionUncheckedUpdateManyWithoutKudoNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutKudoNestedInput
 }
 
 export type KudoUncheckedUpdateManyWithoutReceiverInput = {
@@ -1000,11 +1116,13 @@ export type KudoUncheckedUpdateManyWithoutReceiverInput = {
 export type KudoCountOutputType = {
   comments: number
   reactions: number
+  notifications: number
 }
 
 export type KudoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   comments?: boolean | KudoCountOutputTypeCountCommentsArgs
   reactions?: boolean | KudoCountOutputTypeCountReactionsArgs
+  notifications?: boolean | KudoCountOutputTypeCountNotificationsArgs
 }
 
 /**
@@ -1031,6 +1149,13 @@ export type KudoCountOutputTypeCountReactionsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.ReactionWhereInput
 }
 
+/**
+ * KudoCountOutputType without action
+ */
+export type KudoCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type KudoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1047,6 +1172,7 @@ export type KudoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   receiver?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   comments?: boolean | Prisma.Kudo$commentsArgs<ExtArgs>
   reactions?: boolean | Prisma.Kudo$reactionsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Kudo$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.KudoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["kudo"]>
 
@@ -1099,6 +1225,7 @@ export type KudoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   receiver?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   comments?: boolean | Prisma.Kudo$commentsArgs<ExtArgs>
   reactions?: boolean | Prisma.Kudo$reactionsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Kudo$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.KudoCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type KudoIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1117,6 +1244,7 @@ export type $KudoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     receiver: Prisma.$UserPayload<ExtArgs>
     comments: Prisma.$CommentPayload<ExtArgs>[]
     reactions: Prisma.$ReactionPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1527,6 +1655,7 @@ export interface Prisma__KudoClient<T, Null = never, ExtArgs extends runtime.Typ
   receiver<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   comments<T extends Prisma.Kudo$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Kudo$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reactions<T extends Prisma.Kudo$reactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Kudo$reactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.Kudo$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Kudo$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2012,6 +2141,30 @@ export type Kudo$reactionsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.ReactionScalarFieldEnum | Prisma.ReactionScalarFieldEnum[]
+}
+
+/**
+ * Kudo.notifications
+ */
+export type Kudo$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

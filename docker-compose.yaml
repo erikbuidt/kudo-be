@@ -25,7 +25,6 @@ services:
       - minio_data:/bitnami/minio/data
     networks:
       - minio
-
   redis-cache:
     image: redis:alpine
     container_name: redis-cache
