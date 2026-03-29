@@ -23,8 +23,8 @@ export class KudosController {
   @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
   @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
   @ApiResponse({ status: 200, description: 'Paginated list of kudos with counts' })
-  getFeed(@Query() query: FeedQueryDto) {
-    return this.kudosService.getFeed(query)
+  getFeed(@Request() req: { user?: { id: string } }, @Query() query: FeedQueryDto) {
+    return this.kudosService.getFeed(query, req.user?.id)
   }
 
   @Get('top-values')
@@ -38,7 +38,7 @@ export class KudosController {
   @ApiOperation({ summary: 'Get a specific kudo' })
   @ApiResponse({ status: 200, description: 'Kudo found' })
   @ApiResponse({ status: 404, description: 'Kudo not found' })
-  getKudo(@Param('id') id: string) {
-    return this.kudosService.getKudo(id)
+  getKudo(@Request() req: { user?: { id: string } }, @Param('id') id: string) {
+    return this.kudosService.getKudo(id, req.user?.id)
   }
 }

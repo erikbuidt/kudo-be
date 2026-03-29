@@ -74,7 +74,7 @@ export class KudosService {
     return kudo
   }
 
-  async getFeed(query: FeedQueryDto) {
+  async getFeed(query: FeedQueryDto, userId?: string) {
     const page = query.page ?? 1
     const limit = query.limit ?? 3
     const skip = (page - 1) * limit
@@ -88,6 +88,11 @@ export class KudosService {
           sender: { select: { id: true, username: true } },
           receiver: { select: { id: true, username: true } },
           _count: { select: { comments: true, reactions: true } },
+          reactions: userId ? {
+            where: { user_id: userId },
+            take: 1,
+            select: { id: true }
+          } : false,
         },
       }),
       this.prisma.kudo.count(),
@@ -105,6 +110,7 @@ export class KudosService {
         receiver: kudo.receiver,
         comments_count: kudo._count.comments,
         reactions_count: kudo._count.reactions,
+        is_reacted: Array.isArray(kudo.reactions) && kudo.reactions.length > 0,
       })),
       meta: {
         total_items: total,
@@ -116,13 +122,18 @@ export class KudosService {
     }
   }
 
-  async getKudo(id: string) {
+  async getKudo(id: string, userId?: string) {
     const kudo = await this.prisma.kudo.findUnique({
       where: { id },
       include: {
         sender: { select: { id: true, username: true, display_name: true } },
         receiver: { select: { id: true, username: true, display_name: true } },
         _count: { select: { comments: true, reactions: true } },
+        reactions: userId ? {
+          where: { user_id: userId },
+          take: 1,
+          select: { id: true }
+        } : false,
       },
     })
 
@@ -130,11 +141,12 @@ export class KudosService {
       throw new NotFoundException('Kudo not found')
     }
 
-    const { _count, ...rest } = kudo
+    const { _count, reactions, ...rest } = kudo
     return {
       ...rest,
       comments_count: _count.comments,
       reactions_count: _count.reactions,
+      is_reacted: Array.isArray(reactions) && reactions.length > 0,
     }
   }
 

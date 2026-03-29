@@ -11,7 +11,7 @@ export class ReactionsService {
     private readonly prisma: PrismaService,
     private readonly notificationsService: NotificationsService,
     private readonly eventEmitter: EventEmitter2,
-  ) {}
+  ) { }
 
   async toggleReaction(userId: string, dto: ToggleReactionDto) {
     const kudo = await this.prisma.kudo.findUnique({
@@ -33,14 +33,14 @@ export class ReactionsService {
     if (existing) {
       // Remove reaction (toggle off)
       await this.prisma.reaction.delete({ where: { id: existing.id } })
-      
+
       this.eventEmitter.emit('reaction.toggled', new ReactionToggledEvent(
         dto.kudo_id,
         userId,
         dto.emoji,
         false,
       ));
-      
+
       return { action: 'removed', emoji: dto.emoji }
     }
 
