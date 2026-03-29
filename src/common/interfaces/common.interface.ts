@@ -21,6 +21,13 @@ export interface IConfig {
   minio: MinioOptions
   database: DatabaseOptions
   google: GoogleOptions
+  redis: RedisOptions
+}
+
+export interface RedisOptions {
+  host: string
+  port: number
+  password?: string
 }
 
 export interface GoogleOptions {

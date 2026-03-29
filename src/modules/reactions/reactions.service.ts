@@ -2,12 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '@/package/prisma/prisma.service'
 import { NotificationsService } from '../notifications/notifications.service'
 import type { ToggleReactionDto } from './toggle-reaction.dto'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import { ReactionToggledEvent } from '@/common/events/kudo.events'
 
 @Injectable()
 export class ReactionsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationsService: NotificationsService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async toggleReaction(userId: string, dto: ToggleReactionDto) {
@@ -31,12 +34,12 @@ export class ReactionsService {
       // Remove reaction (toggle off)
       await this.prisma.reaction.delete({ where: { id: existing.id } })
       
-      this.notificationsService.broadcastReaction({
-        kudo_id: dto.kudo_id,
-        emoji: dto.emoji,
-        action: 'removed',
+      this.eventEmitter.emit('reaction.toggled', new ReactionToggledEvent(
+        dto.kudo_id,
         userId,
-      })
+        dto.emoji,
+        false,
+      ));
       
       return { action: 'removed', emoji: dto.emoji }
     }
@@ -52,25 +55,12 @@ export class ReactionsService {
       include: { user: { select: { id: true, username: true } } },
     })
 
-    // Notify kudo participants (excluding the reacter)
-    const notifyIds = new Set([kudo.sender_id, kudo.receiver_id])
-    notifyIds.delete(userId)
-
-    for (const recipientId of notifyIds) {
-      this.notificationsService.createNotification({
-        userId: recipientId,
-        type: 'REACTION_ON_KUDO',
-        message: `${reaction.user.username} reacted with ${dto.emoji} to a kudo`,
-        kudoId: dto.kudo_id,
-      })
-    }
-
-    this.notificationsService.broadcastReaction({
-      kudo_id: dto.kudo_id,
-      emoji: dto.emoji,
-      action: 'added',
+    this.eventEmitter.emit('reaction.toggled', new ReactionToggledEvent(
+      dto.kudo_id,
       userId,
-    })
+      dto.emoji,
+      true,
+    ));
 
     return { action: 'added', reaction }
   }

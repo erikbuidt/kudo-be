@@ -7,12 +7,15 @@ import {
 import { PrismaService } from '@/package/prisma/prisma.service'
 import type { CreateKudoDto, FeedQueryDto } from './create-kudo.dto'
 import { NotificationsService } from '../notifications/notifications.service'
+import { EventEmitter2 } from '@nestjs/event-emitter'
+import { KudoCreatedEvent } from '@/common/events/kudo.events'
 
 @Injectable()
 export class KudosService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationsService: NotificationsService,
+    private readonly eventEmitter: EventEmitter2,
   ) { }
 
   async createKudo(senderId: string, dto: CreateKudoDto) {
@@ -60,20 +63,13 @@ export class KudosService {
       })
     })
 
-    // Notify receiver
-    await this.notificationsService.createNotification({
-      userId: dto.receiver_id,
-      type: 'KUDO_RECEIVED',
-      message: `${kudo.sender.username} sent you a kudo`,
-      kudoId: kudo.id,
-    })
-
-    // Broadcast to everyone for feed
-    this.notificationsService.broadcastKudo({
-      ...kudo,
-      comments_count: 0,
-      reactions_count: 0,
-    })
+    // Emit event for background tasks (notifications, feed)
+    this.eventEmitter.emit('kudo.created', new KudoCreatedEvent(
+      kudo.id,
+      kudo.sender_id,
+      kudo.receiver_id,
+      kudo.points
+    ));
 
     return kudo
   }

@@ -22,6 +22,9 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { CommentsModule } from './modules/comments/comments.module'
 import { ReactionsModule } from './modules/reactions/reactions.module'
 import { MediaModule } from './modules/media/media.module'
+import { EventEmitterModule } from '@nestjs/event-emitter'
+import { BullModule } from '@nestjs/bullmq'
+import { ConfigService } from '@nestjs/config'
 
 // Guards
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard'
@@ -34,6 +37,17 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard'
       expandVariables: true,
       envFilePath: ['.env'],
       load: [configuration],
+    }),
+    EventEmitterModule.forRoot(),
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        connection: {
+          host: configService.get<string>('redis.host'),
+          port: configService.get<number>('redis.port'),
+          password: configService.get<string>('redis.password'),
+        },
+      }),
     }),
     ScheduleModule.forRoot(),
 

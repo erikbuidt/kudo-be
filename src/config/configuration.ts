@@ -20,6 +20,9 @@ export const configuration = (): ConfigApp => {
     GOOGLE_CLIENT_ID: str(),
     GOOGLE_CLIENT_SECRET: str(),
     GOOGLE_CALLBACK_URL: str({ default: 'http://localhost:3000/auth/google/callback' }),
+    REDIS_HOST: str({ default: 'localhost' }),
+    REDIS_PORT: num({ default: 6379 }),
+    REDIS_PASSWORD: str({ default: 'redis123!' }),
   })
 
   return {
@@ -43,6 +46,11 @@ export const configuration = (): ConfigApp => {
       clientId: configEnvValidate.GOOGLE_CLIENT_ID,
       clientSecret: configEnvValidate.GOOGLE_CLIENT_SECRET,
       callbackUrl: configEnvValidate.GOOGLE_CALLBACK_URL,
+    },
+    redis: {
+      host: configEnvValidate.REDIS_HOST,
+      port: configEnvValidate.REDIS_PORT,
+      password: configEnvValidate.REDIS_PASSWORD,
     },
   }
 }
