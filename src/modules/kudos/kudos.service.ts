@@ -92,7 +92,6 @@ export class KudosService {
       }),
       this.prisma.kudo.count(),
     ])
-    await new Promise((resolve) => setTimeout(resolve, 2000))
     return {
       data: items.map((kudo) => ({
         id: kudo.id,
@@ -126,7 +125,7 @@ export class KudosService {
         _count: { select: { comments: true, reactions: true } },
       },
     })
-    
+
     if (!kudo) {
       throw new NotFoundException('Kudo not found')
     }

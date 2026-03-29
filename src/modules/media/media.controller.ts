@@ -7,7 +7,7 @@ import { PresignedUrlDto } from './presigned-url.dto';
 @ApiBearerAuth('access-token')
 @Controller('media')
 export class MediaController {
-  constructor(private readonly mediaService: MediaService) {}
+  constructor(private readonly mediaService: MediaService) { }
 
   @Get('presigned-url')
   @ApiOperation({ summary: 'Get a presigned URL for direct file upload to MinIO' })
