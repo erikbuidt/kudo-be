@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, Request } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger'
+import { BadRequestException, Body, Controller, Get, Headers, Post, Request } from '@nestjs/common'
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse, ApiHeader } from '@nestjs/swagger'
 import { RewardsService } from './rewards.service'
 import { RedeemRewardDto } from './redeem-reward.dto'
 
@@ -18,10 +18,18 @@ export class RewardsController {
 
   @Post('redeem')
   @ApiOperation({ summary: 'Redeem a reward using received_balance' })
+  @ApiHeader({ name: 'X-Idempotency-Key', description: 'Deterministic hash to prevent duplicate redemptions', required: true })
   @ApiResponse({ status: 201, description: 'Redemption created successfully' })
-  @ApiResponse({ status: 400, description: 'Insufficient balance or out of stock' })
-  redeem(@Request() req: { user: { id: string } }, @Body() dto: RedeemRewardDto) {
-    return this.rewardsService.redeemReward(req.user.id, dto)
+  @ApiResponse({ status: 400, description: 'Insufficient balance, out of stock, or missing idempotency key' })
+  redeem(
+    @Request() req: { user: { id: string } },
+    @Body() dto: RedeemRewardDto,
+    @Headers('x-idempotency-key') idempotencyKey: string,
+  ) {
+    if (!idempotencyKey) {
+      throw new BadRequestException('X-Idempotency-Key header is required')
+    }
+    return this.rewardsService.redeemReward(req.user.id, dto, idempotencyKey)
   }
 
   @Get('redemptions/me')

@@ -390,7 +390,8 @@ export const ModelName = {
   Reaction: 'Reaction',
   Reward: 'Reward',
   Redemption: 'Redemption',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  IdempotencyRecord: 'IdempotencyRecord'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "kudo" | "comment" | "reaction" | "reward" | "redemption" | "notification"
+    modelProps: "user" | "kudo" | "comment" | "reaction" | "reward" | "redemption" | "notification" | "idempotencyRecord"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -928,6 +929,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    IdempotencyRecord: {
+      payload: Prisma.$IdempotencyRecordPayload<ExtArgs>
+      fields: Prisma.IdempotencyRecordFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IdempotencyRecordFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IdempotencyRecordFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload>
+        }
+        findFirst: {
+          args: Prisma.IdempotencyRecordFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IdempotencyRecordFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload>
+        }
+        findMany: {
+          args: Prisma.IdempotencyRecordFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload>[]
+        }
+        create: {
+          args: Prisma.IdempotencyRecordCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload>
+        }
+        createMany: {
+          args: Prisma.IdempotencyRecordCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IdempotencyRecordCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload>[]
+        }
+        delete: {
+          args: Prisma.IdempotencyRecordDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload>
+        }
+        update: {
+          args: Prisma.IdempotencyRecordUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload>
+        }
+        deleteMany: {
+          args: Prisma.IdempotencyRecordDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IdempotencyRecordUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IdempotencyRecordUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload>[]
+        }
+        upsert: {
+          args: Prisma.IdempotencyRecordUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IdempotencyRecordPayload>
+        }
+        aggregate: {
+          args: Prisma.IdempotencyRecordAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIdempotencyRecord>
+        }
+        groupBy: {
+          args: Prisma.IdempotencyRecordGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IdempotencyRecordGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IdempotencyRecordCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IdempotencyRecordCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1056,12 +1131,33 @@ export const NotificationScalarFieldEnum = {
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+export const IdempotencyRecordScalarFieldEnum = {
+  key: 'key',
+  user_id: 'user_id',
+  request_type: 'request_type',
+  status: 'status',
+  response: 'response',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type IdempotencyRecordScalarFieldEnum = (typeof IdempotencyRecordScalarFieldEnum)[keyof typeof IdempotencyRecordScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1078,6 +1174,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1206,6 +1311,48 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'IdempotencyRequestType'
+ */
+export type EnumIdempotencyRequestTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IdempotencyRequestType'>
+    
+
+
+/**
+ * Reference to a field of type 'IdempotencyRequestType[]'
+ */
+export type ListEnumIdempotencyRequestTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IdempotencyRequestType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'IdempotencyStatus'
+ */
+export type EnumIdempotencyStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IdempotencyStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'IdempotencyStatus[]'
+ */
+export type ListEnumIdempotencyStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IdempotencyStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1320,6 +1467,7 @@ export type GlobalOmitConfig = {
   reward?: Prisma.RewardOmit
   redemption?: Prisma.RedemptionOmit
   notification?: Prisma.NotificationOmit
+  idempotencyRecord?: Prisma.IdempotencyRecordOmit
 }
 
 /* Types for Logging */

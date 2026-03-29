@@ -53,3 +53,19 @@ export const NotificationType = {
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const IdempotencyStatus = {
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type IdempotencyStatus = (typeof IdempotencyStatus)[keyof typeof IdempotencyStatus]
+
+
+export const IdempotencyRequestType = {
+  REDEEM_REWARD: 'REDEEM_REWARD'
+} as const
+
+export type IdempotencyRequestType = (typeof IdempotencyRequestType)[keyof typeof IdempotencyRequestType]

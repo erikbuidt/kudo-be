@@ -74,3 +74,8 @@ export type Redemption = Prisma.RedemptionModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model IdempotencyRecord
+ * 
+ */
+export type IdempotencyRecord = Prisma.IdempotencyRecordModel

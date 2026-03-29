@@ -80,7 +80,7 @@ export class KudosService {
 
   async getFeed(query: FeedQueryDto) {
     const page = query.page ?? 1
-    const limit = query.limit ?? 5
+    const limit = query.limit ?? 3
     const skip = (page - 1) * limit
 
     const [items, total] = await Promise.all([

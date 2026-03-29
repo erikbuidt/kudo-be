@@ -25,7 +25,7 @@ export class CommentsService {
         user_id: userId,
       },
       include: {
-        user: { select: { id: true, username: true } },
+        user: { select: { id: true, username: true, display_name: true } },
       },
     })
 
@@ -50,7 +50,7 @@ export class CommentsService {
       where: { kudo_id: kudoId },
       orderBy: { created_at: 'asc' },
       include: {
-        user: { select: { id: true, username: true } },
+        user: { select: { id: true, username: true, display_name: true } },
       },
     })
   }

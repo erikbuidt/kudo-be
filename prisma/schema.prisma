@@ -169,3 +169,25 @@ enum NotificationType {
   COMMENT_ON_KUDO
   REACTION_ON_KUDO
 }
+
+model IdempotencyRecord {
+  key          String                   @id  // SHA-256 hash (globally unique by construction)
+  user_id      String
+  request_type IdempotencyRequestType
+  status       IdempotencyStatus        @default(PROCESSING)
+  response     Json?                    // null while PROCESSING; set on COMPLETED or FAILED
+  created_at   DateTime                 @default(now())
+  updated_at   DateTime                 @updatedAt
+
+  @@map("idempotency_records")
+}
+
+enum IdempotencyStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum IdempotencyRequestType {
+  REDEEM_REWARD
+}
