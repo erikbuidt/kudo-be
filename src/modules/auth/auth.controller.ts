@@ -4,10 +4,12 @@ import { AuthService } from './auth.service'
 import { RegisterDto, LoginDto } from './auth.dto'
 import { Public } from '@/common/decorators/public.decorator'
 import { GoogleAuthGuard } from '../../common/guards/google-auth.guard'
+import { Logger } from '@nestjs/common'
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name)
   constructor(private readonly authService: AuthService) { }
 
   @Public()
@@ -52,6 +54,7 @@ export class AuthController {
   googleAuthRedirect(@Request() req: any, @Res() res: any) {
     const { access_token } = req.user
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+    this.logger.log(`Google OAuth callback: ${frontendUrl}`)
     return res.redirect(`${frontendUrl}/auth/callback?access_token=${access_token}`)
   }
 }

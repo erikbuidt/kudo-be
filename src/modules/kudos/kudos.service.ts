@@ -75,10 +75,10 @@ export class KudosService {
   }
 
   async getFeed(query: FeedQueryDto, userId?: string) {
-    const page = query.page ?? 1
-    const limit = query.limit ?? 3
+    const page = query.page
+    const limit = query.limit
     const skip = (page - 1) * limit
-
+    await new Promise((resolve) => setTimeout(resolve, 1000))
     const [items, total] = await Promise.all([
       this.prisma.kudo.findMany({
         skip,

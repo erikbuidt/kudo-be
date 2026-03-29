@@ -49,7 +49,7 @@ export class FeedQueryDto {
   @IsInt()
   @Min(1)
   @Type(() => Number)
-  page?: number = 1
+  page: number = 1
 
   @ApiPropertyOptional({ example: 10, minimum: 1, maximum: 50, default: 10 })
   @IsOptional()
@@ -57,5 +57,5 @@ export class FeedQueryDto {
   @Min(1)
   @Max(50)
   @Type(() => Number)
-  limit?: number = 10
+  limit: number = 10
 }
