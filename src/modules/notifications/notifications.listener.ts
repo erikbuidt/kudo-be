@@ -71,7 +71,7 @@ export class NotificationsListener {
         await this.notificationsQueue.add('send-notification', {
           userId: recipientId,
           type: 'COMMENT_ON_KUDO',
-          message: `${user?.display_name || user?.username} commented on a kudo you're part of`,
+          message: `${user?.display_name || user?.username} commented on a kudo you sent`,
           kudoId: event.kudoId,
         });
       }
