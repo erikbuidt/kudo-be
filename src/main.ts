@@ -14,7 +14,7 @@ async function bootstrap() {
   app.useWebSocketAdapter(redisIoAdapter);
 
   app.enableCors({
-    origin: true, // Allow all origins (safe for development with localhost)
+    origin: process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : true,
     credentials: true,
   });
 

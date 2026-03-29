@@ -1,4 +1,4 @@
-import { MediaType } from "@prisma/client"
+import { MediaType } from "@/generated/prisma/client"
 
 export class CommentCreatedEvent {
   constructor(

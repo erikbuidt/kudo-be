@@ -3,6 +3,7 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import * as Minio from 'minio';
 import { extname } from 'path';
 import { MediaType } from '@/generated/prisma/enums';
+import { MinioOptions } from '@/common/interfaces/common.interface';
 
 @Injectable()
 export class MediaService {
@@ -11,14 +12,7 @@ export class MediaService {
   private readonly logger = new Logger(MediaService.name);
 
   constructor(private readonly configService: ConfigService) {
-    const minioConfig = this.configService.get('minio') as {
-      endPoint: string;
-      port: number;
-      accessKey: string;
-      secretKey: string;
-      useSSL: boolean;
-      bucketName: string;
-    };
+    const minioConfig = this.configService.get('minio') as MinioOptions;
     
     this.minioClient = new Minio.Client({
       endPoint: minioConfig.endPoint,
@@ -74,11 +68,21 @@ export class MediaService {
     const objectName = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
     
     // Generate URL valid for 60 minutes (3600 seconds)
-    const presignedUrl = await this.minioClient.presignedPutObject(this.bucketName, objectName, 3600);
+    let presignedUrl = await this.minioClient.presignedPutObject(this.bucketName, objectName, 3600);
     
-    const minioConfig = this.configService.get('minio') as any;
+    const minioConfig = this.configService.get('minio') as MinioOptions;
     const protocol = minioConfig.useSSL ? 'https' : 'http';
-    const publicUrl = `${protocol}://${minioConfig.endPoint}:${minioConfig.port}/${this.bucketName}/${objectName}`;
+    const internalBaseUrl = `${protocol}://${minioConfig.endPoint}:${minioConfig.port}`;
+    
+    // If we have a public URL (like /minio), use it for the final media URL
+    // and also replace the internal host in the presigned URL so the browser can reach it
+    const publicBaseUrl = minioConfig.publicUrl || internalBaseUrl;
+    
+    if (minioConfig.publicUrl) {
+      presignedUrl = presignedUrl.replace(internalBaseUrl, minioConfig.publicUrl);
+    }
+
+    const publicUrl = `${publicBaseUrl}/${this.bucketName}/${objectName}`;
     
     return {
       presigned_url: presignedUrl,

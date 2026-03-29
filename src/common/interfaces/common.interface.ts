@@ -47,6 +47,7 @@ export interface MinioOptions {
   secretKey: string
   useSSL: boolean
   bucketName: string
+  publicUrl?: string
 }
 
 export interface IPaginationMeta {

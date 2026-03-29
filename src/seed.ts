@@ -1,4 +1,4 @@
-import { PrismaService } from '../src/package/prisma/prisma.service';
+import { PrismaService } from './package/prisma/prisma.service';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -68,7 +68,6 @@ async function main() {
   console.log('Seeding rewards...');
 
   for (const reward of rewardsData) {
-    // Check if it already exists by name just in case we run seed multiple times
     const existing = await prisma.reward.findFirst({
       where: { name: reward.name }
     });

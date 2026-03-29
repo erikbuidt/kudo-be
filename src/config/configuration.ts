@@ -14,6 +14,7 @@ export const configuration = (): ConfigApp => {
     MINIO_SECRET_KEY: str({ default: "" }),
     MINIO_USE_SSL: bool({ default: false }),
     MINIO_BUCKET_NAME: str({ default: "kudo" }),
+    MINIO_PUBLIC_URL: str({ default: "" }),
     IGNORED_ROUTES: str({ default: "" }),
     DATABASE_URL: str(),
     JWT_SECRET: str(),
@@ -38,6 +39,7 @@ export const configuration = (): ConfigApp => {
       secretKey: configEnvValidate.MINIO_SECRET_KEY,
       useSSL: configEnvValidate.MINIO_USE_SSL,
       bucketName: configEnvValidate.MINIO_BUCKET_NAME,
+      publicUrl: configEnvValidate.MINIO_PUBLIC_URL,
     },
     database: {
       url: configEnvValidate.DATABASE_URL,
