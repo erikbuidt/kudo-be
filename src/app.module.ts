@@ -29,6 +29,8 @@ import { ConfigService } from '@nestjs/config'
 // Guards
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard'
 
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler'
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -38,6 +40,10 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard'
       envFilePath: ['.env'],
       load: [configuration],
     }),
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 100,
+    }]),
     EventEmitterModule.forRoot(),
     BullModule.forRootAsync({
       inject: [ConfigService],
@@ -74,6 +80,10 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard'
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })
