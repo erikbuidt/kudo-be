@@ -125,15 +125,22 @@ export class KudosService {
     const kudo = await this.prisma.kudo.findUnique({
       where: { id },
       include: {
-        sender: { select: { id: true, username: true } },
-        receiver: { select: { id: true, username: true } },
+        sender: { select: { id: true, username: true, display_name: true } },
+        receiver: { select: { id: true, username: true, display_name: true } },
         _count: { select: { comments: true, reactions: true } },
       },
     })
+    
     if (!kudo) {
       throw new NotFoundException('Kudo not found')
     }
-    return kudo
+
+    const { _count, ...rest } = kudo
+    return {
+      ...rest,
+      comments_count: _count.comments,
+      reactions_count: _count.reactions,
+    }
   }
 
   async getTopCoreValuesThisWeek() {

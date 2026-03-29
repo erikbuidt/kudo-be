@@ -21,6 +21,7 @@ export class CommentsService {
       data: {
         content: dto.content,
         media_url: dto.media_url,
+        media_type: dto.media_type,
         kudo_id: dto.kudo_id,
         user_id: userId,
       },

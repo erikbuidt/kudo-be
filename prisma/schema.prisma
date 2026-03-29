@@ -69,7 +69,8 @@ model Kudo {
 model Comment {
   id        String  @id @default(uuid())
   content   String  @db.Text
-  media_url String?
+  media_url  String?
+  media_type MediaType?
 
   kudo_id String
   kudo    Kudo   @relation(fields: [kudo_id], references: [id])

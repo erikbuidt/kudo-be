@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator'
+import { IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator'
+import { MediaType } from '@prisma/client'
 
 export class CreateCommentDto {
   @ApiProperty({ example: 'uuid-of-kudo', description: 'Kudo to comment on' })
@@ -15,4 +16,9 @@ export class CreateCommentDto {
   @IsOptional()
   @IsString()
   media_url?: string
+
+  @ApiPropertyOptional({ enum: MediaType })
+  @IsOptional()
+  @IsEnum(MediaType)
+  media_type?: MediaType
 }

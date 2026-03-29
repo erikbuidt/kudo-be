@@ -1077,6 +1077,7 @@ export const CommentScalarFieldEnum = {
   id: 'id',
   content: 'content',
   media_url: 'media_url',
+  media_type: 'media_type',
   kudo_id: 'kudo_id',
   user_id: 'user_id',
   created_at: 'created_at'
