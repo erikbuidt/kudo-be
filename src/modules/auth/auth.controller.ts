@@ -53,7 +53,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Handles Google OAuth callback' })
   googleAuthRedirect(@Request() req: any, @Res() res: any) {
     const { access_token } = req.user
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+    const frontendUrl = process.env.FRONTEND_URL || 'https://db35-42-119-241-175.ngrok-free.app'
     this.logger.log(`Google OAuth callback: ${frontendUrl}`)
     return res.redirect(`${frontendUrl}/auth/callback?access_token=${access_token}`)
   }
