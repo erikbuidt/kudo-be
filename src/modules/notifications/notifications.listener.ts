@@ -14,12 +14,12 @@ export class NotificationsListener {
     @InjectQueue('notifications') private readonly notificationsQueue: Queue,
     private readonly notificationsGateway: NotificationsGateway,
     private readonly prisma: PrismaService,
-  ) {}
+  ) { }
 
   @OnEvent('kudo.created')
   async handleKudoCreated(event: KudoCreatedEvent) {
     this.logger.log(`Kudo created event handled for Kudo ID: ${event.kudoId}`);
-    
+
     // 1. Simple Task: Real-time broadcast (Event Bus)
     // We fetch the kudo details to broadcast
     const kudo = await this.prisma.kudo.findUnique({
@@ -58,6 +58,11 @@ export class NotificationsListener {
       select: { sender_id: true, receiver_id: true }
     });
 
+    const user = await this.prisma.user.findUnique({
+      where: { id: event.userId },
+      select: { id: true, username: true, display_name: true },
+    });
+
     if (kudo) {
       const recipientIds = new Set([kudo.sender_id, kudo.receiver_id]);
       recipientIds.delete(event.userId);
@@ -66,7 +71,7 @@ export class NotificationsListener {
         await this.notificationsQueue.add('send-notification', {
           userId: recipientId,
           type: 'COMMENT_ON_KUDO',
-          message: `Someone commented on a kudo you're part of`,
+          message: `${user?.display_name || user?.username} commented on a kudo you're part of`,
           kudoId: event.kudoId,
         });
       }
@@ -95,6 +100,11 @@ export class NotificationsListener {
       }
     });
 
+    const user = await this.prisma.user.findUnique({
+      where: { id: event.userId },
+      select: { id: true, username: true, display_name: true },
+    });
+
     if (kudo) {
       // Simple Task: Broadcast addition (Event Bus)
       this.notificationsGateway.broadcastReaction({
@@ -110,7 +120,7 @@ export class NotificationsListener {
         await this.notificationsQueue.add('send-notification', {
           userId: kudo.receiver_id,
           type: 'REACTION_ON_KUDO',
-          message: `Someone reacted with ${event.emoji} to your kudo`,
+          message: `${user?.display_name || user?.username} reacted with ${event.emoji} to your kudo`,
           kudoId: event.kudoId,
         });
       }

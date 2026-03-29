@@ -1,0 +1,80 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'amanotes-be/**'
+      - '.github/workflows/backend.yml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'amanotes-be/**'
+      - '.github/workflows/backend.yml'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}-backend
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./amanotes-be
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './amanotes-be/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run Tests
+        run: npm run test -- --passWithNoTests
+
+      - name: Build
+        run: npm run build
+
+  docker-push:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./amanotes-be
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
