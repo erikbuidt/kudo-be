@@ -115,12 +115,19 @@ export class NotificationsListener {
       });
 
       // Complex Task: Persistent notification (BullMQ)
-      // Only notify if reacter is not the receiver
       if (kudo.receiver_id !== event.userId) {
         await this.notificationsQueue.add('send-notification', {
           userId: kudo.receiver_id,
           type: 'REACTION_ON_KUDO',
           message: `${user?.display_name || user?.username} reacted with ${event.emoji} to your kudo`,
+          kudoId: event.kudoId,
+        });
+      }
+      if (kudo.sender_id !== event.userId) {
+        await this.notificationsQueue.add('send-notification', {
+          userId: kudo.sender_id,
+          type: 'REACTION_ON_KUDO',
+          message: `${user?.display_name || user?.username} reacted with ${event.emoji} to a kudo you sent`,
           kudoId: event.kudoId,
         });
       }
