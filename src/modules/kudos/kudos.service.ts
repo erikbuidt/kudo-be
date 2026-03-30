@@ -85,8 +85,8 @@ export class KudosService {
         take: limit,
         orderBy: { created_at: 'desc' },
         include: {
-          sender: { select: { id: true, username: true } },
-          receiver: { select: { id: true, username: true } },
+          sender: { select: { id: true, username: true, display_name: true } },
+          receiver: { select: { id: true, username: true, display_name: true } },
           _count: { select: { comments: true, reactions: true } },
           reactions: userId ? {
             where: { user_id: userId },
