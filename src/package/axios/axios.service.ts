@@ -18,7 +18,7 @@ export class AxiosService {
         },
         ...config,
       })
-      .pipe(map((response) => response.data));
+      .pipe(map((response) => response.data as T));
     return firstValueFrom(result);
   }
 
@@ -36,7 +36,7 @@ export class AxiosService {
         },
         ...config,
       })
-      .pipe(map((response) => response.data));
+      .pipe(map((response) => response.data as T));
     return firstValueFrom(result);
   }
 
@@ -54,7 +54,7 @@ export class AxiosService {
         },
         ...config,
       })
-      .pipe(map((response) => response.data));
+      .pipe(map((response) => response.data as T));
     return firstValueFrom(result);
   }
 
@@ -68,7 +68,7 @@ export class AxiosService {
         },
         ...config,
       })
-      .pipe(map((response) => response.data));
+      .pipe(map((response) => response.data as T));
     return firstValueFrom(result);
   }
 }

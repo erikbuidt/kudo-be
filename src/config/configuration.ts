@@ -4,7 +4,6 @@ import { bool, cleanEnv, num, str } from 'envalid';
 export type ConfigApp = IConfig;
 
 export const configuration = (): ConfigApp => {
-  console.log(process.env.GOOGLE_CALLBACK_URL);
   const configEnvValidate = cleanEnv(process.env, {
     NODE_ENV: str({ default: Env.PRODUCTION, choices: Object.values(Env) }),
     APP_PORT: num({ default: 3000 }),
@@ -22,11 +21,12 @@ export const configuration = (): ConfigApp => {
     GOOGLE_CLIENT_ID: str(),
     GOOGLE_CLIENT_SECRET: str(),
     GOOGLE_CALLBACK_URL: str({
-      default: 'https://kudo.coursity.io.vn/api/auth/google/callback',
+      default: 'http://localhost:3000/auth/google/callback',
     }),
     REDIS_HOST: str({ default: 'localhost' }),
     REDIS_PORT: num({ default: 6379 }),
     REDIS_PASSWORD: str({ default: 'redis123!' }),
+    DB_LOG_QUERY: bool({ default: false }),
   });
 
   return {
@@ -46,6 +46,7 @@ export const configuration = (): ConfigApp => {
     },
     database: {
       url: configEnvValidate.DATABASE_URL,
+      logQuery: configEnvValidate.DB_LOG_QUERY,
     },
     google: {
       clientId: configEnvValidate.GOOGLE_CLIENT_ID,

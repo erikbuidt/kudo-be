@@ -3,16 +3,15 @@ import {
   Injectable,
   OnModuleInit,
   OnModuleDestroy,
-  Logger,
 } from '@nestjs/common';
 import { PrismaClient } from '@/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { Logger } from 'http-system-logger'
 
 @Injectable()
 export class PrismaService
   extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy
-{
+  implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(PrismaService.name);
 
   constructor() {
@@ -33,12 +32,20 @@ export class PrismaService
 
   async onModuleInit() {
     await this.$connect();
-    this.logger.log('Prisma connected to database');
+    if (process.env.DB_LOG_QUERY === 'true' || process.env.NODE_ENV !== 'production') {
+      // @ts-ignore
+      this.$on('query', (e: any) => {
+        this.logger.debug(`Query: ${e.query}`);
+        this.logger.debug(`Params: ${e.params}`);
+        this.logger.debug(`Duration: ${e.duration}ms`);
+      });
+    }
+    this.logger.info('Prisma connected to database');
   }
 
   async onModuleDestroy() {
     await this.$disconnect();
-    this.logger.log('Prisma disconnected from database');
+    this.logger.info('Prisma disconnected from database');
   }
 
   /**

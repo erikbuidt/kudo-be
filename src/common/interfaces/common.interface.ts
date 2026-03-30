@@ -32,6 +32,7 @@ export interface GoogleOptions {
 
 export interface DatabaseOptions {
   url: string;
+  logQuery: boolean;
 }
 
 export interface MinioOptions {
