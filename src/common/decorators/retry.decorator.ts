@@ -14,7 +14,6 @@ export const Retry = (
     const originalMethod = descriptor.value
     const logger = new Logger('RetryDecorator')
 
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     descriptor.value = async function (...args: any[]) {
       let attempts = 0
       while (attempts <= retries) {

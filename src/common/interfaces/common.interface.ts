@@ -9,12 +9,6 @@ export interface IConfigApp {
   version: string
 }
 
-export interface IClerk {
-  apiKey: string
-  publishableKey: string
-  secretKey: string
-}
-
 export interface IConfig {
   env: Env
   app: IConfigApp
@@ -73,24 +67,3 @@ export interface IPaginationMeta {
   current_page: number
 }
 
-export interface PublicMetadata {
-  db_user_id: number
-  role: string
-}
-
-export type EncodeByResolution = {
-  inputPath: string
-  isHasAudio: boolean
-  resolution: {
-    width: number
-    height: number
-  }
-  outputSegmentPath: string
-  outputPath: string
-  bitrate: {
-    720: number
-    1080: number
-    1440: number
-    original: number
-  }
-}
