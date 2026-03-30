@@ -4,6 +4,7 @@ import { bool, cleanEnv, num, str } from "envalid"
 export type ConfigApp = IConfig
 
 export const configuration = (): ConfigApp => {
+  console.log(process.env.GOOGLE_CALLBACK_URL)
   const configEnvValidate = cleanEnv(process.env, {
     NODE_ENV: str({ default: Env.PRODUCTION, choices: Object.values(Env) }),
     APP_PORT: num({ default: 3000 }),
