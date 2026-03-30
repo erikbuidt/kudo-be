@@ -20,7 +20,7 @@ export const configuration = (): ConfigApp => {
     JWT_SECRET: str(),
     GOOGLE_CLIENT_ID: str(),
     GOOGLE_CLIENT_SECRET: str(),
-    GOOGLE_CALLBACK_URL: str({ default: 'http://localhost:3000/auth/google/callback' }),
+    GOOGLE_CALLBACK_URL: str({ default: 'https://kudo.coursity.io.vn/api/auth/google/callback' }),
     REDIS_HOST: str({ default: 'localhost' }),
     REDIS_PORT: num({ default: 6379 }),
     REDIS_PASSWORD: str({ default: 'redis123!' }),
