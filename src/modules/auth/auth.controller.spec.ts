@@ -15,9 +15,7 @@ describe('AuthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [
-        { provide: AuthService, useValue: mockAuthService },
-      ],
+      providers: [{ provide: AuthService, useValue: mockAuthService }],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
@@ -30,7 +28,11 @@ describe('AuthController', () => {
 
   describe('register', () => {
     it('should call service.register', async () => {
-      const dto = { username: 'test', email: 'test@example.com', password: '123' } as any;
+      const dto = {
+        username: 'test',
+        email: 'test@example.com',
+        password: '123',
+      } as any;
       mockAuthService.register.mockResolvedValueOnce({ id: '1' });
       const result = await controller.register(dto);
       expect(result).toEqual({ id: '1' });
@@ -61,10 +63,12 @@ describe('AuthController', () => {
     it('should redirect back to frontend with access_token', async () => {
       const req = { user: { access_token: 'token' } };
       const res = { redirect: jest.fn() };
-      
+
       controller.googleAuthRedirect(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining('access_token=token'));
+      expect(res.redirect).toHaveBeenCalledWith(
+        expect.stringContaining('access_token=token'),
+      );
     });
   });
 });

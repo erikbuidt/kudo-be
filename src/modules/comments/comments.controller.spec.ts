@@ -14,9 +14,7 @@ describe('CommentsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CommentsController],
-      providers: [
-        { provide: CommentsService, useValue: mockCommentsService },
-      ],
+      providers: [{ provide: CommentsService, useValue: mockCommentsService }],
     }).compile();
 
     controller = module.get<CommentsController>(CommentsController);

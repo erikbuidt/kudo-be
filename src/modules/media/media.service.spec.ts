@@ -10,7 +10,9 @@ jest.mock('minio', () => {
       bucketExists: jest.fn().mockResolvedValue(true),
       makeBucket: jest.fn().mockResolvedValue(true),
       setBucketPolicy: jest.fn().mockResolvedValue(true),
-      presignedPutObject: jest.fn().mockResolvedValue('http://mock-presigned-url'),
+      presignedPutObject: jest
+        .fn()
+        .mockResolvedValue('http://mock-presigned-url'),
     })),
   };
 });
@@ -64,7 +66,9 @@ describe('MediaService', () => {
     });
 
     it('should throw BadRequestException for unsupported extension', async () => {
-      await expect(service.getPresignedUrl('test.txt')).rejects.toThrow(BadRequestException);
+      await expect(service.getPresignedUrl('test.txt')).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 });

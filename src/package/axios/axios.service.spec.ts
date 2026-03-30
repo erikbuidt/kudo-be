@@ -40,7 +40,10 @@ describe('AxiosService', () => {
       mockHttpService.get.mockReturnValue(of({ data }));
       const result = await service.get('http://test.com');
       expect(result).toBe(data);
-      expect(mockHttpService.get).toHaveBeenCalledWith('http://test.com', expect.any(Object));
+      expect(mockHttpService.get).toHaveBeenCalledWith(
+        'http://test.com',
+        expect.any(Object),
+      );
     });
   });
 
@@ -50,7 +53,11 @@ describe('AxiosService', () => {
       mockHttpService.post.mockReturnValue(of({ data }));
       const result = await service.post('http://test.com', { name: 'test' });
       expect(result).toBe(data);
-      expect(mockHttpService.post).toHaveBeenCalledWith('http://test.com', { name: 'test' }, expect.any(Object));
+      expect(mockHttpService.post).toHaveBeenCalledWith(
+        'http://test.com',
+        { name: 'test' },
+        expect.any(Object),
+      );
     });
   });
 
@@ -60,7 +67,11 @@ describe('AxiosService', () => {
       mockHttpService.put.mockReturnValue(of({ data }));
       const result = await service.put('http://test.com', { name: 'test' });
       expect(result).toBe(data);
-      expect(mockHttpService.put).toHaveBeenCalledWith('http://test.com', { name: 'test' }, expect.any(Object));
+      expect(mockHttpService.put).toHaveBeenCalledWith(
+        'http://test.com',
+        { name: 'test' },
+        expect.any(Object),
+      );
     });
   });
 
@@ -70,7 +81,10 @@ describe('AxiosService', () => {
       mockHttpService.delete.mockReturnValue(of({ data }));
       const result = await service.delete('http://test.com');
       expect(result).toBe(data);
-      expect(mockHttpService.delete).toHaveBeenCalledWith('http://test.com', expect.any(Object));
+      expect(mockHttpService.delete).toHaveBeenCalledWith(
+        'http://test.com',
+        expect.any(Object),
+      );
     });
   });
 });

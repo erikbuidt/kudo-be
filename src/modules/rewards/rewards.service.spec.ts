@@ -47,7 +47,9 @@ describe('RewardsService', () => {
 
   describe('findAll', () => {
     it('should return available rewards', async () => {
-      mockPrisma.reward.findMany.mockResolvedValueOnce([{ id: '1', stock: 10 }]);
+      mockPrisma.reward.findMany.mockResolvedValueOnce([
+        { id: '1', stock: 10 },
+      ]);
       const result = await service.findAll();
       expect(result).toHaveLength(1);
     });
@@ -59,20 +61,32 @@ describe('RewardsService', () => {
     const idempotencyKey = 'key-1';
 
     it('should throw BadRequestException if idempotency key already completed', async () => {
-      mockPrisma.idempotencyRecord.findUnique.mockResolvedValueOnce({ status: 'COMPLETED' });
-      await expect(service.redeemReward(userId, dto, idempotencyKey)).rejects.toThrow(BadRequestException);
+      mockPrisma.idempotencyRecord.findUnique.mockResolvedValueOnce({
+        status: 'COMPLETED',
+      });
+      await expect(
+        service.redeemReward(userId, dto, idempotencyKey),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('should throw BadRequestException if idempotency key processing', async () => {
-      mockPrisma.idempotencyRecord.findUnique.mockResolvedValueOnce({ status: 'PROCESSING' });
-      await expect(service.redeemReward(userId, dto, idempotencyKey)).rejects.toThrow(BadRequestException);
+      mockPrisma.idempotencyRecord.findUnique.mockResolvedValueOnce({
+        status: 'PROCESSING',
+      });
+      await expect(
+        service.redeemReward(userId, dto, idempotencyKey),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('should successfully redeem reward', async () => {
       mockPrisma.idempotencyRecord.findUnique.mockResolvedValueOnce(null);
       mockPrisma.idempotencyRecord.create.mockResolvedValueOnce({});
       mockPrisma.$queryRaw.mockResolvedValueOnce([{ received_balance: 100 }]);
-      mockPrisma.reward.findUnique.mockResolvedValueOnce({ id: 'reward-1', point_cost: 50, stock: 5 });
+      mockPrisma.reward.findUnique.mockResolvedValueOnce({
+        id: 'reward-1',
+        point_cost: 50,
+        stock: 5,
+      });
       mockPrisma.redemption.create.mockResolvedValueOnce({ id: 'red-1' });
       mockPrisma.idempotencyRecord.update.mockResolvedValueOnce({});
 
@@ -80,32 +94,48 @@ describe('RewardsService', () => {
 
       expect(result).toEqual({ id: 'red-1' });
       expect(mockPrisma.idempotencyRecord.create).toHaveBeenCalled();
-      expect(mockPrisma.idempotencyRecord.update).toHaveBeenCalledWith(expect.objectContaining({
-        data: expect.objectContaining({ status: 'COMPLETED' })
-      }));
+      expect(mockPrisma.idempotencyRecord.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ status: 'COMPLETED' }),
+        }),
+      );
     });
 
     it('should throw BadRequestException if insufficient balance', async () => {
       mockPrisma.idempotencyRecord.findUnique.mockResolvedValueOnce(null);
       mockPrisma.idempotencyRecord.create.mockResolvedValueOnce({});
       mockPrisma.$queryRaw.mockResolvedValueOnce([{ received_balance: 10 }]);
-      mockPrisma.reward.findUnique.mockResolvedValueOnce({ id: 'reward-1', point_cost: 50, stock: 5 });
+      mockPrisma.reward.findUnique.mockResolvedValueOnce({
+        id: 'reward-1',
+        point_cost: 50,
+        stock: 5,
+      });
       mockPrisma.idempotencyRecord.update.mockResolvedValueOnce({});
 
-      await expect(service.redeemReward(userId, dto, idempotencyKey)).rejects.toThrow('Insufficient balance');
-      expect(mockPrisma.idempotencyRecord.update).toHaveBeenCalledWith(expect.objectContaining({
-        data: expect.objectContaining({ status: 'FAILED' })
-      }));
+      await expect(
+        service.redeemReward(userId, dto, idempotencyKey),
+      ).rejects.toThrow('Insufficient balance');
+      expect(mockPrisma.idempotencyRecord.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ status: 'FAILED' }),
+        }),
+      );
     });
 
     it('should throw BadRequestException if out of stock', async () => {
       mockPrisma.idempotencyRecord.findUnique.mockResolvedValueOnce(null);
       mockPrisma.idempotencyRecord.create.mockResolvedValueOnce({});
       mockPrisma.$queryRaw.mockResolvedValueOnce([{ received_balance: 100 }]);
-      mockPrisma.reward.findUnique.mockResolvedValueOnce({ id: 'reward-1', point_cost: 50, stock: 0 });
+      mockPrisma.reward.findUnique.mockResolvedValueOnce({
+        id: 'reward-1',
+        point_cost: 50,
+        stock: 0,
+      });
       mockPrisma.idempotencyRecord.update.mockResolvedValueOnce({});
 
-      await expect(service.redeemReward(userId, dto, idempotencyKey)).rejects.toThrow('Reward is out of stock');
+      await expect(
+        service.redeemReward(userId, dto, idempotencyKey),
+      ).rejects.toThrow('Reward is out of stock');
     });
   });
 

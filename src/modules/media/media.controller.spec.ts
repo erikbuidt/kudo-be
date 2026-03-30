@@ -13,9 +13,7 @@ describe('MediaController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MediaController],
-      providers: [
-        { provide: MediaService, useValue: mockMediaService },
-      ],
+      providers: [{ provide: MediaService, useValue: mockMediaService }],
     }).compile();
 
     controller = module.get<MediaController>(MediaController);
@@ -29,7 +27,9 @@ describe('MediaController', () => {
   describe('getPresignedUrl', () => {
     it('should call service.getPresignedUrl', async () => {
       const query = { filename: 'test.png' };
-      mockMediaService.getPresignedUrl.mockResolvedValueOnce({ presigned_url: 'url' });
+      mockMediaService.getPresignedUrl.mockResolvedValueOnce({
+        presigned_url: 'url',
+      });
 
       const result = await controller.getPresignedUrl(query);
 

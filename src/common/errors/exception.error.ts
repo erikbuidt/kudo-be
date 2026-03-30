@@ -1,9 +1,9 @@
-import { HttpException, HttpStatus } from '@nestjs/common'
-import type { IAppError, IError } from './interface.error'
+import { HttpException, HttpStatus } from '@nestjs/common';
+import type { IAppError, IError } from './interface.error';
 
 export class AppException extends HttpException {
   constructor(private readonly error: IAppError) {
-    super(error, error.status)
+    super(error, error.status);
   }
 
   override getResponse(): IError {
@@ -12,6 +12,6 @@ export class AppException extends HttpException {
       code: this.error.code,
       time: new Date().toISOString(),
       message: this.error.message,
-    }
+    };
   }
 }

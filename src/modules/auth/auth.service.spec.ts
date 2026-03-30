@@ -64,9 +64,11 @@ describe('AuthService', () => {
 
       expect(result.id).toBe('1');
       expect(bcrypt.hash).toHaveBeenCalledWith(dto.password, 10);
-      expect(mockPrisma.user.create).toHaveBeenCalledWith(expect.objectContaining({
-        data: expect.objectContaining({ password: 'hashed-password' })
-      }));
+      expect(mockPrisma.user.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ password: 'hashed-password' }),
+        }),
+      );
     });
   });
 
@@ -79,13 +81,21 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if password does not match', async () => {
-      mockPrisma.user.findUnique.mockResolvedValueOnce({ id: '1', password: 'hashed' });
+      mockPrisma.user.findUnique.mockResolvedValueOnce({
+        id: '1',
+        password: 'hashed',
+      });
       (bcrypt.compare as jest.Mock).mockResolvedValueOnce(false);
       await expect(service.login(dto)).rejects.toThrow(UnauthorizedException);
     });
 
     it('should return access_token and user on success', async () => {
-      const user = { id: '1', email: dto.email, username: 'test', password: 'hashed' };
+      const user = {
+        id: '1',
+        email: dto.email,
+        username: 'test',
+        password: 'hashed',
+      };
       mockPrisma.user.findUnique.mockResolvedValueOnce(user);
       (bcrypt.compare as jest.Mock).mockResolvedValueOnce(true);
 
@@ -114,7 +124,11 @@ describe('AuthService', () => {
         .mockResolvedValueOnce(null) // find by email
         .mockResolvedValueOnce(null); // find by username
       (bcrypt.hash as jest.Mock).mockResolvedValueOnce('hashed');
-      mockPrisma.user.create.mockResolvedValueOnce({ id: '1', ...profile, username: 'test' });
+      mockPrisma.user.create.mockResolvedValueOnce({
+        id: '1',
+        ...profile,
+        username: 'test',
+      });
 
       const result = await service.validateOAuthLogin(profile);
 
@@ -127,15 +141,20 @@ describe('AuthService', () => {
         .mockResolvedValueOnce(null) // email check
         .mockResolvedValueOnce({ id: '2' }) // username exists
         .mockResolvedValueOnce(null); // username with counter 1 is free
-      
-      mockPrisma.user.create.mockResolvedValueOnce({ id: '1', username: 'test1' });
+
+      mockPrisma.user.create.mockResolvedValueOnce({
+        id: '1',
+        username: 'test1',
+      });
       (bcrypt.hash as jest.Mock).mockResolvedValueOnce('hashed');
 
       await service.validateOAuthLogin(profile);
 
-      expect(mockPrisma.user.create).toHaveBeenCalledWith(expect.objectContaining({
-        data: expect.objectContaining({ username: 'test1' })
-      }));
+      expect(mockPrisma.user.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ username: 'test1' }),
+        }),
+      );
     });
   });
 });

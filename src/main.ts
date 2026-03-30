@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppInterceptor } from '@/common/interceptors/app.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RedisIoAdapter } from '@/common/adapters/redis-io.adapter';
-import { httpLogger } from "http-system-logger"
+import { httpLogger } from 'http-system-logger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -18,8 +18,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.use(httpLogger)
-
+  app.use(httpLogger);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -33,7 +32,9 @@ async function bootstrap() {
   // Swagger
   const config = new DocumentBuilder()
     .setTitle('Kudo — Peer Recognition API')
-    .setDescription('Backend API for the Kudo peer recognition and rewards platform')
+    .setDescription(
+      'Backend API for the Kudo peer recognition and rewards platform',
+    )
     .setVersion('1.0')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },

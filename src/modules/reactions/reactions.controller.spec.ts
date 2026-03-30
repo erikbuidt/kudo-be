@@ -31,7 +31,9 @@ describe('ReactionsController', () => {
     it('should call service.toggleReaction', async () => {
       const userId = 'user-1';
       const dto = { kudo_id: 'kudo-1', emoji: '👍' };
-      mockReactionsService.toggleReaction.mockResolvedValueOnce({ action: 'added' });
+      mockReactionsService.toggleReaction.mockResolvedValueOnce({
+        action: 'added',
+      });
 
       const result = await controller.toggle({ user: { id: userId } }, dto);
 

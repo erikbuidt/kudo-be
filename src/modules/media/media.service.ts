@@ -18,7 +18,7 @@ export class MediaService {
     // because the public ngrok URL might not be reachable from inside the container.
     this.minioClient = new Minio.Client({
       endPoint: minioConfig.endPoint, // "minio"
-      port: minioConfig.port,       // 9000
+      port: minioConfig.port, // 9000
       useSSL: minioConfig.useSSL,
       accessKey: minioConfig.accessKey,
       secretKey: minioConfig.secretKey,
@@ -49,10 +49,15 @@ export class MediaService {
           },
         ],
       };
-      await this.minioClient.setBucketPolicy(this.bucketName, JSON.stringify(policy));
+      await this.minioClient.setBucketPolicy(
+        this.bucketName,
+        JSON.stringify(policy),
+      );
       this.logger.log(`Bucket '${this.bucketName}' set to public read`);
     } catch (error) {
-      this.logger.error(`Error ensuring bucket exists: ${(error as Error).message}`);
+      this.logger.error(
+        `Error ensuring bucket exists: ${(error as Error).message}`,
+      );
     }
   }
 
@@ -65,14 +70,16 @@ export class MediaService {
     } else if (['.mp4', '.mov', '.avi', '.webm', '.mkv'].includes(ext)) {
       mediaType = 'VIDEO' as MediaType;
     } else {
-      throw new BadRequestException(`Unsupported file extension: ${ext || 'none'}. Allowed image/video formats only.`);
+      throw new BadRequestException(
+        `Unsupported file extension: ${ext || 'none'}. Allowed image/video formats only.`,
+      );
     }
 
     const objectName = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
 
     // Generate URL valid for 60 minutes (3600 seconds)
     const minioConfig = this.configService.get('minio') as MinioOptions;
-    
+
     // To make presigned URLs work over ngrok, we MUST sign using the public hostname.
     let signingClient = this.minioClient;
     if (minioConfig.publicUrl && minioConfig.publicUrl.startsWith('http')) {
@@ -80,26 +87,36 @@ export class MediaService {
         const url = new URL(minioConfig.publicUrl);
         signingClient = new Minio.Client({
           endPoint: url.hostname,
-          port: url.port ? parseInt(url.port) : (url.protocol === 'https:' ? 443 : 80),
+          port: url.port
+            ? parseInt(url.port)
+            : url.protocol === 'https:'
+              ? 443
+              : 80,
           useSSL: url.protocol === 'https:',
           accessKey: minioConfig.accessKey,
           secretKey: minioConfig.secretKey,
           region: 'us-east-1',
         });
       } catch (e) {
-        this.logger.error(`Invalid public URL for signing: ${minioConfig.publicUrl}`);
+        this.logger.error(
+          `Invalid public URL for signing: ${minioConfig.publicUrl}`,
+        );
       }
     }
 
-    const presignedUrl = await signingClient.presignedPutObject(this.bucketName, objectName, 3600);
-    
+    const presignedUrl = await signingClient.presignedPutObject(
+      this.bucketName,
+      objectName,
+      3600,
+    );
+
     const protocol = minioConfig.useSSL ? 'https' : 'http';
     const internalBaseUrl = `${protocol}://${minioConfig.endPoint}:${minioConfig.port}`;
-    
+
     // For the final URL, use the public URL if it exists (e.g. https://ngrok.app)
     const publicBaseUrl = minioConfig.publicUrl || internalBaseUrl;
     const publicUrl = `${publicBaseUrl}/${this.bucketName}/${objectName}`;
-    
+
     return {
       presigned_url: presignedUrl,
       media_url: publicUrl,

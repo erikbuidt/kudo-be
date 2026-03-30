@@ -31,22 +31,36 @@ describe('NotificationsController', () => {
   describe('getUserNotifications', () => {
     it('should call service.getUserNotifications with parsed query params', async () => {
       const userId = 'user-1';
-      mockNotificationsService.getUserNotifications.mockResolvedValueOnce({ data: [], meta: {} });
+      mockNotificationsService.getUserNotifications.mockResolvedValueOnce({
+        data: [],
+        meta: {},
+      });
 
-      const result = await controller.getUserNotifications({ user: { id: userId } }, '10', '2');
+      const result = await controller.getUserNotifications(
+        { user: { id: userId } },
+        '10',
+        '2',
+      );
 
       expect(result).toEqual({ data: [], meta: {} });
       expect(service.getUserNotifications).toHaveBeenCalledWith(userId, 10, 2);
     });
 
     it('should use default values if query params are missing', async () => {
-        const userId = 'user-1';
-        mockNotificationsService.getUserNotifications.mockResolvedValueOnce({ data: [], meta: {} });
-  
-        await controller.getUserNotifications({ user: { id: userId } }, undefined, undefined);
-  
-        expect(service.getUserNotifications).toHaveBeenCalledWith(userId, 5, 1);
+      const userId = 'user-1';
+      mockNotificationsService.getUserNotifications.mockResolvedValueOnce({
+        data: [],
+        meta: {},
       });
+
+      await controller.getUserNotifications(
+        { user: { id: userId } },
+        undefined,
+        undefined,
+      );
+
+      expect(service.getUserNotifications).toHaveBeenCalledWith(userId, 5, 1);
+    });
   });
 
   describe('getUnreadCount', () => {
@@ -63,9 +77,15 @@ describe('NotificationsController', () => {
     it('should call service.markAsRead', async () => {
       const userId = 'user-1';
       const notiId = 'noti-1';
-      mockNotificationsService.markAsRead.mockResolvedValueOnce({ id: notiId, is_read: true });
+      mockNotificationsService.markAsRead.mockResolvedValueOnce({
+        id: notiId,
+        is_read: true,
+      });
 
-      const result = await controller.markAsRead({ user: { id: userId } }, notiId);
+      const result = await controller.markAsRead(
+        { user: { id: userId } },
+        notiId,
+      );
 
       expect(result).toEqual({ id: notiId, is_read: true });
       expect(service.markAsRead).toHaveBeenCalledWith(userId, notiId);

@@ -36,9 +36,11 @@ describe('UsersService', () => {
 
       const result = await service.findById('1');
       expect(result).toEqual(mockUser);
-      expect(mockPrisma.user.findUnique).toHaveBeenCalledWith(expect.objectContaining({
-        where: { id: '1' }
-      }));
+      expect(mockPrisma.user.findUnique).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: '1' },
+        }),
+      );
     });
   });
 

@@ -52,36 +52,51 @@ describe('ReactionsService', () => {
 
     it('should throw NotFoundException if kudo not found', async () => {
       mockPrisma.kudo.findUnique.mockResolvedValueOnce(null);
-      await expect(service.toggleReaction(userId, dto)).rejects.toThrow(NotFoundException);
+      await expect(service.toggleReaction(userId, dto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should remove reaction if it already exists', async () => {
       mockPrisma.kudo.findUnique.mockResolvedValueOnce({ id: 'kudo-1' });
-      mockPrisma.reaction.findUnique.mockResolvedValueOnce({ id: 'reaction-1' });
+      mockPrisma.reaction.findUnique.mockResolvedValueOnce({
+        id: 'reaction-1',
+      });
 
       const result = await service.toggleReaction(userId, dto);
 
       expect(result.action).toBe('removed');
       expect(mockPrisma.reaction.delete).toHaveBeenCalled();
-      expect(mockEventEmitter.emit).toHaveBeenCalledWith('reaction.toggled', expect.any(Object));
+      expect(mockEventEmitter.emit).toHaveBeenCalledWith(
+        'reaction.toggled',
+        expect.any(Object),
+      );
     });
 
     it('should add reaction if it does not exist', async () => {
       mockPrisma.kudo.findUnique.mockResolvedValueOnce({ id: 'kudo-1' });
       mockPrisma.reaction.findUnique.mockResolvedValueOnce(null);
-      mockPrisma.reaction.create.mockResolvedValueOnce({ id: 'reaction-1', emoji: '👍' });
+      mockPrisma.reaction.create.mockResolvedValueOnce({
+        id: 'reaction-1',
+        emoji: '👍',
+      });
 
       const result = await service.toggleReaction(userId, dto);
 
       expect(result.action).toBe('added');
       expect(mockPrisma.reaction.create).toHaveBeenCalled();
-      expect(mockEventEmitter.emit).toHaveBeenCalledWith('reaction.toggled', expect.any(Object));
+      expect(mockEventEmitter.emit).toHaveBeenCalledWith(
+        'reaction.toggled',
+        expect.any(Object),
+      );
     });
   });
 
   describe('getReactionSummary', () => {
     it('should return grouped reactions', async () => {
-      mockPrisma.reaction.groupBy.mockResolvedValueOnce([{ emoji: '👍', _count: { emoji: 5 } }]);
+      mockPrisma.reaction.groupBy.mockResolvedValueOnce([
+        { emoji: '👍', _count: { emoji: 5 } },
+      ]);
       const result = await service.getReactionSummary('kudo-1');
       expect(result).toHaveLength(1);
       expect(result[0].emoji).toBe('👍');

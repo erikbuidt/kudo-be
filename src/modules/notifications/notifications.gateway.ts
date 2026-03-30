@@ -3,67 +3,73 @@ import {
   WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
-} from '@nestjs/websockets'
-import { Server, Socket } from 'socket.io'
-import { JwtService } from '@nestjs/jwt'
-import { Logger } from '@nestjs/common'
+} from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
+import { JwtService } from '@nestjs/jwt';
+import { Logger } from '@nestjs/common';
 
 export interface NotificationPayload {
-  type: 'kudo_received' | 'comment_added' | 'reaction_added'
-  message: string
-  data: Record<string, unknown>
+  type: 'kudo_received' | 'comment_added' | 'reaction_added';
+  message: string;
+  data: Record<string, unknown>;
 }
 
 @WebSocketGateway({ cors: { origin: '*' }, namespace: '/notifications' })
-export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class NotificationsGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
-  server: Server
+  server: Server;
 
+  private readonly logger = new Logger(NotificationsGateway.name);
 
-  private readonly logger = new Logger(NotificationsGateway.name)
-
-  constructor(private readonly jwtService: JwtService) { }
+  constructor(private readonly jwtService: JwtService) {}
 
   async handleConnection(socket: Socket) {
     try {
-      const token = socket.handshake.auth?.token as string | undefined
-      if (!token) throw new Error('No token')
+      const token = socket.handshake.auth?.token as string | undefined;
+      if (!token) throw new Error('No token');
 
-      const payload = this.jwtService.verify<{ sub: string }>(token)
-      const userId = payload.sub
+      const payload = this.jwtService.verify<{ sub: string }>(token);
+      const userId = payload.sub;
 
-      socket.data.userId = userId
+      socket.data.userId = userId;
 
       // The Redis adapter will automatically pub/sub to this room across all server instances!
-      socket.join(`user:${userId}`)
-      this.logger.log(`User ${userId} connected (socketId=${socket.id})`)
+      socket.join(`user:${userId}`);
+      this.logger.log(`User ${userId} connected (socketId=${socket.id})`);
     } catch {
-      this.logger.warn(`Unauthorized WebSocket connection — disconnecting ${socket.id}`)
-      socket.disconnect()
+      this.logger.warn(
+        `Unauthorized WebSocket connection — disconnecting ${socket.id}`,
+      );
+      socket.disconnect();
     }
   }
 
   handleDisconnect(socket: Socket) {
-    const userId = socket.data.userId as string | undefined
+    const userId = socket.data.userId as string | undefined;
     if (userId) {
-      this.logger.log(`User ${userId} disconnected (socketId=${socket.id})`)
+      this.logger.log(`User ${userId} disconnected (socketId=${socket.id})`);
     }
   }
 
   /** Push a notification to all sockets belonging to `userId` */
   sendToUser(userId: string, payload: NotificationPayload) {
-    this.server.to(`user:${userId}`).emit('notification', payload)
+    this.server.to(`user:${userId}`).emit('notification', payload);
   }
 
   /** Broadcast a new kudo to all connected clients for the public feed */
   broadcastKudo(kudo: any) {
-    this.server.emit('kudo_created', kudo)
+    this.server.emit('kudo_created', kudo);
   }
 
   /** Broadcast a reaction update to all connected clients */
-  broadcastReaction(data: { kudo_id: string; emoji: string; action: 'added' | 'removed'; userId: string }) {
-    this.server.emit('reaction_updated', data)
+  broadcastReaction(data: {
+    kudo_id: string;
+    emoji: string;
+    action: 'added' | 'removed';
+    userId: string;
+  }) {
+    this.server.emit('reaction_updated', data);
   }
 }
-
-

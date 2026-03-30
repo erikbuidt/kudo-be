@@ -1,7 +1,7 @@
-import { AsyncLocalStorage } from "async_hooks"
+import { AsyncLocalStorage } from 'async_hooks';
 
 interface Context {
-  userId: string
+  userId: string;
 }
 
 /**
@@ -9,14 +9,14 @@ interface Context {
  * Used to track the current user ID for audit fields in Prisma middleware
  */
 export class RequestContext {
-  private static readonly storage = new AsyncLocalStorage<Context>()
+  private static readonly storage = new AsyncLocalStorage<Context>();
 
   static run(context: Context, callback: () => void) {
-    this.storage.run(context, callback)
+    this.storage.run(context, callback);
   }
 
   static getUserId(): string | undefined {
-    const store = this.storage.getStore()
-    return store?.userId
+    const store = this.storage.getStore();
+    return store?.userId;
   }
 }

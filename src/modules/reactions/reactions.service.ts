@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { PrismaService } from '@/package/prisma/prisma.service'
-import { NotificationsService } from '../notifications/notifications.service'
-import type { ToggleReactionDto } from './toggle-reaction.dto'
-import { EventEmitter2 } from '@nestjs/event-emitter'
-import { ReactionToggledEvent } from '@/common/events/kudo.events'
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '@/package/prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import type { ToggleReactionDto } from './toggle-reaction.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ReactionToggledEvent } from '@/common/events/kudo.events';
 
 @Injectable()
 export class ReactionsService {
@@ -11,14 +11,14 @@ export class ReactionsService {
     private readonly prisma: PrismaService,
     private readonly notificationsService: NotificationsService,
     private readonly eventEmitter: EventEmitter2,
-  ) { }
+  ) {}
 
   async toggleReaction(userId: string, dto: ToggleReactionDto) {
     const kudo = await this.prisma.kudo.findUnique({
       where: { id: dto.kudo_id },
       select: { id: true, sender_id: true, receiver_id: true },
-    })
-    if (!kudo) throw new NotFoundException('Kudo not found')
+    });
+    if (!kudo) throw new NotFoundException('Kudo not found');
 
     const existing = await this.prisma.reaction.findUnique({
       where: {
@@ -28,22 +28,19 @@ export class ReactionsService {
           emoji: dto.emoji,
         },
       },
-    })
+    });
 
     if (existing) {
       // Remove reaction (toggle off)
-      await this.prisma.reaction.delete({ where: { id: existing.id } })
+      await this.prisma.reaction.delete({ where: { id: existing.id } });
 
-      this.eventEmitter.emit('reaction.toggled', new ReactionToggledEvent(
-        dto.kudo_id,
-        userId,
-        dto.emoji,
-        false,
-      ));
+      this.eventEmitter.emit(
+        'reaction.toggled',
+        new ReactionToggledEvent(dto.kudo_id, userId, dto.emoji, false),
+      );
 
-      return { action: 'removed', emoji: dto.emoji }
+      return { action: 'removed', emoji: dto.emoji };
     }
-
 
     // Add reaction (toggle on)
     const reaction = await this.prisma.reaction.create({
@@ -53,16 +50,14 @@ export class ReactionsService {
         user_id: userId,
       },
       include: { user: { select: { id: true, username: true } } },
-    })
+    });
 
-    this.eventEmitter.emit('reaction.toggled', new ReactionToggledEvent(
-      dto.kudo_id,
-      userId,
-      dto.emoji,
-      true,
-    ));
+    this.eventEmitter.emit(
+      'reaction.toggled',
+      new ReactionToggledEvent(dto.kudo_id, userId, dto.emoji, true),
+    );
 
-    return { action: 'added', reaction }
+    return { action: 'added', reaction };
   }
 
   getReactionSummary(kudoId: string) {
@@ -70,6 +65,6 @@ export class ReactionsService {
       by: ['emoji'],
       where: { kudo_id: kudoId },
       _count: { emoji: true },
-    })
+    });
   }
 }

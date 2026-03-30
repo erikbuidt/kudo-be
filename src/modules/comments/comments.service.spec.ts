@@ -50,17 +50,25 @@ describe('CommentsService', () => {
 
     it('should throw NotFoundException if kudo not found', async () => {
       mockPrisma.kudo.findUnique.mockResolvedValueOnce(null);
-      await expect(service.addComment(userId, dto)).rejects.toThrow(NotFoundException);
+      await expect(service.addComment(userId, dto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should create comment and emit event', async () => {
       mockPrisma.kudo.findUnique.mockResolvedValueOnce({ id: 'kudo-1' });
-      mockPrisma.comment.create.mockResolvedValueOnce({ id: 'comment-1', content: 'Nice!' });
+      mockPrisma.comment.create.mockResolvedValueOnce({
+        id: 'comment-1',
+        content: 'Nice!',
+      });
 
       const result = await service.addComment(userId, dto);
 
       expect(result.id).toBe('comment-1');
-      expect(mockEventEmitter.emit).toHaveBeenCalledWith('comment.created', expect.any(Object));
+      expect(mockEventEmitter.emit).toHaveBeenCalledWith(
+        'comment.created',
+        expect.any(Object),
+      );
     });
   });
 

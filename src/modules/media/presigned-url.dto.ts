@@ -1,9 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsString } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class PresignedUrlDto {
-  @ApiProperty({ example: 'profile-picture.png', description: 'Name of the file to upload' })
+  @ApiProperty({
+    example: 'profile-picture.png',
+    description: 'Name of the file to upload',
+  })
   @IsString()
   @IsNotEmpty()
-  filename: string
+  filename: string;
 }

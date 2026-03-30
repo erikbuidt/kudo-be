@@ -1,5 +1,5 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { CoreValue, MediaType } from '@/generated/prisma/enums'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { CoreValue, MediaType } from '@/generated/prisma/enums';
 import {
   IsEnum,
   IsInt,
@@ -9,38 +9,46 @@ import {
   IsUUID,
   Max,
   Min,
-} from 'class-validator'
-import { Type } from 'class-transformer'
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateKudoDto {
-  @ApiProperty({ example: 'uuid-of-receiver', description: 'ID of the user receiving the kudo' })
+  @ApiProperty({
+    example: 'uuid-of-receiver',
+    description: 'ID of the user receiving the kudo',
+  })
   @IsUUID()
-  receiver_id: string
+  receiver_id: string;
 
-  @ApiProperty({ example: 25, minimum: 10, maximum: 50, description: 'Points to award (10–50)' })
+  @ApiProperty({
+    example: 25,
+    minimum: 10,
+    maximum: 50,
+    description: 'Points to award (10–50)',
+  })
   @IsInt()
   @Min(10)
   @Max(50)
-  points: number
+  points: number;
 
   @ApiProperty({ example: 'Amazing work on the Q1 presentation!' })
   @IsString()
   @IsNotEmpty()
-  description: string
+  description: string;
 
   @ApiProperty({ enum: CoreValue, example: CoreValue.TEAMWORK })
   @IsEnum(CoreValue)
-  core_value: CoreValue
+  core_value: CoreValue;
 
   @ApiPropertyOptional({ example: 'https://s3.example.com/media/kudo-123.png' })
   @IsOptional()
   @IsString()
-  media_url?: string
+  media_url?: string;
 
   @ApiPropertyOptional({ enum: MediaType, example: MediaType.IMAGE })
   @IsOptional()
   @IsEnum(MediaType)
-  media_type?: MediaType
+  media_type?: MediaType;
 }
 
 export class FeedQueryDto {
@@ -49,7 +57,7 @@ export class FeedQueryDto {
   @IsInt()
   @Min(1)
   @Type(() => Number)
-  page: number = 1
+  page: number = 1;
 
   @ApiPropertyOptional({ example: 10, minimum: 1, maximum: 50, default: 10 })
   @IsOptional()
@@ -57,5 +65,5 @@ export class FeedQueryDto {
   @Min(1)
   @Max(50)
   @Type(() => Number)
-  limit: number = 10
+  limit: number = 10;
 }

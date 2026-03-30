@@ -52,16 +52,22 @@ describe('NotificationsService', () => {
         message: 'You got a kudo!',
         kudoId: 'kudo-1',
       };
-      mockPrisma.notification.create.mockResolvedValueOnce({ id: 'noti-1', ...data });
+      mockPrisma.notification.create.mockResolvedValueOnce({
+        id: 'noti-1',
+        ...data,
+      });
 
       const result = await service.createNotification(data);
 
       expect(result.id).toBe('noti-1');
       expect(mockPrisma.notification.create).toHaveBeenCalled();
-      expect(mockGateway.sendToUser).toHaveBeenCalledWith(data.userId, expect.objectContaining({
-        type: 'kudo_received',
-        message: data.message
-      }));
+      expect(mockGateway.sendToUser).toHaveBeenCalledWith(
+        data.userId,
+        expect.objectContaining({
+          type: 'kudo_received',
+          message: data.message,
+        }),
+      );
     });
   });
 
@@ -80,24 +86,39 @@ describe('NotificationsService', () => {
   describe('markAsRead', () => {
     it('should throw NotFoundException if notification not found', async () => {
       mockPrisma.notification.findUnique.mockResolvedValueOnce(null);
-      await expect(service.markAsRead('user-1', 'noti-1')).rejects.toThrow(NotFoundException);
+      await expect(service.markAsRead('user-1', 'noti-1')).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw NotFoundException if notification belongs to another user', async () => {
-      mockPrisma.notification.findUnique.mockResolvedValueOnce({ id: 'noti-1', user_id: 'user-2' });
-      await expect(service.markAsRead('user-1', 'noti-1')).rejects.toThrow(NotFoundException);
+      mockPrisma.notification.findUnique.mockResolvedValueOnce({
+        id: 'noti-1',
+        user_id: 'user-2',
+      });
+      await expect(service.markAsRead('user-1', 'noti-1')).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should update notification as read', async () => {
-      mockPrisma.notification.findUnique.mockResolvedValueOnce({ id: 'noti-1', user_id: 'user-1' });
-      mockPrisma.notification.update.mockResolvedValueOnce({ id: 'noti-1', is_read: true });
+      mockPrisma.notification.findUnique.mockResolvedValueOnce({
+        id: 'noti-1',
+        user_id: 'user-1',
+      });
+      mockPrisma.notification.update.mockResolvedValueOnce({
+        id: 'noti-1',
+        is_read: true,
+      });
 
       const result = await service.markAsRead('user-1', 'noti-1');
       expect(result.is_read).toBe(true);
-      expect(mockPrisma.notification.update).toHaveBeenCalledWith(expect.objectContaining({
-        where: { id: 'noti-1' },
-        data: { is_read: true }
-      }));
+      expect(mockPrisma.notification.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: 'noti-1' },
+          data: { is_read: true },
+        }),
+      );
     });
   });
 

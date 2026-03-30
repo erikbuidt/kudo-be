@@ -3,48 +3,50 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common'
-import { PrismaService } from '@/package/prisma/prisma.service'
-import type { CreateKudoDto, FeedQueryDto } from './create-kudo.dto'
-import { NotificationsService } from '../notifications/notifications.service'
-import { EventEmitter2 } from '@nestjs/event-emitter'
-import { KudoCreatedEvent } from '@/common/events/kudo.events'
+} from '@nestjs/common';
+import { PrismaService } from '@/package/prisma/prisma.service';
+import type { CreateKudoDto, FeedQueryDto } from './create-kudo.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { KudoCreatedEvent } from '@/common/events/kudo.events';
 
 @Injectable()
 export class KudosService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly notificationsService: NotificationsService,
     private readonly eventEmitter: EventEmitter2,
-  ) { }
+  ) {}
 
   async createKudo(senderId: string, dto: CreateKudoDto) {
     if (senderId === dto.receiver_id) {
-      throw new BadRequestException('You cannot send a kudo to yourself')
+      throw new BadRequestException('You cannot send a kudo to yourself');
     }
 
-    const sender = await this.prisma.user.findUnique({ where: { id: senderId } })
-    if (!sender) throw new NotFoundException('Sender not found')
+    const sender = await this.prisma.user.findUnique({
+      where: { id: senderId },
+    });
+    if (!sender) throw new NotFoundException('Sender not found');
 
-    const receiver = await this.prisma.user.findUnique({ where: { id: dto.receiver_id } })
-    if (!receiver) throw new NotFoundException('Receiver not found')
+    const receiver = await this.prisma.user.findUnique({
+      where: { id: dto.receiver_id },
+    });
+    if (!receiver) throw new NotFoundException('Receiver not found');
 
     if (sender.giving_budget < dto.points) {
       throw new ForbiddenException(
         `Insufficient giving budget. You have ${sender.giving_budget} pts remaining.`,
-      )
+      );
     }
 
     const kudo = await this.prisma.$transaction(async (tx) => {
       await tx.user.update({
         where: { id: senderId },
         data: { giving_budget: { decrement: dto.points } },
-      })
+      });
 
       await tx.user.update({
         where: { id: dto.receiver_id },
         data: { received_balance: { increment: dto.points } },
-      })
+      });
 
       return tx.kudo.create({
         data: {
@@ -60,25 +62,28 @@ export class KudosService {
           sender: { select: { id: true, username: true } },
           receiver: { select: { id: true, username: true } },
         },
-      })
-    })
+      });
+    });
 
     // Emit event for background tasks (notifications, feed)
-    this.eventEmitter.emit('kudo.created', new KudoCreatedEvent(
-      kudo.id,
-      kudo.sender_id,
-      kudo.receiver_id,
-      kudo.points
-    ));
+    this.eventEmitter.emit(
+      'kudo.created',
+      new KudoCreatedEvent(
+        kudo.id,
+        kudo.sender_id,
+        kudo.receiver_id,
+        kudo.points,
+      ),
+    );
 
-    return kudo
+    return kudo;
   }
 
   async getFeed(query: FeedQueryDto, userId?: string) {
-    const page = query.page
-    const limit = query.limit
-    const skip = (page - 1) * limit
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    const page = query.page;
+    const limit = query.limit;
+    const skip = (page - 1) * limit;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const [items, total] = await Promise.all([
       this.prisma.kudo.findMany({
         skip,
@@ -86,17 +91,21 @@ export class KudosService {
         orderBy: { created_at: 'desc' },
         include: {
           sender: { select: { id: true, username: true, display_name: true } },
-          receiver: { select: { id: true, username: true, display_name: true } },
+          receiver: {
+            select: { id: true, username: true, display_name: true },
+          },
           _count: { select: { comments: true, reactions: true } },
-          reactions: userId ? {
-            where: { user_id: userId },
-            take: 1,
-            select: { id: true }
-          } : false,
+          reactions: userId
+            ? {
+                where: { user_id: userId },
+                take: 1,
+                select: { id: true },
+              }
+            : false,
         },
       }),
       this.prisma.kudo.count(),
-    ])
+    ]);
     return {
       data: items.map((kudo) => ({
         id: kudo.id,
@@ -119,7 +128,7 @@ export class KudosService {
         total_pages: Math.ceil(total / limit),
         item_count: items.length,
       },
-    }
+    };
   }
 
   async getKudo(id: string, userId?: string) {
@@ -129,25 +138,27 @@ export class KudosService {
         sender: { select: { id: true, username: true, display_name: true } },
         receiver: { select: { id: true, username: true, display_name: true } },
         _count: { select: { comments: true, reactions: true } },
-        reactions: userId ? {
-          where: { user_id: userId },
-          take: 1,
-          select: { id: true }
-        } : false,
+        reactions: userId
+          ? {
+              where: { user_id: userId },
+              take: 1,
+              select: { id: true },
+            }
+          : false,
       },
-    })
+    });
 
     if (!kudo) {
-      throw new NotFoundException('Kudo not found')
+      throw new NotFoundException('Kudo not found');
     }
 
-    const { _count, reactions, ...rest } = kudo
+    const { _count, reactions, ...rest } = kudo;
     return {
       ...rest,
       comments_count: _count.comments,
       reactions_count: _count.reactions,
       is_reacted: Array.isArray(reactions) && reactions.length > 0,
-    }
+    };
   }
 
   async getTopCoreValuesThisWeek() {
@@ -181,9 +192,9 @@ export class KudosService {
       take: 3,
     });
 
-    return results.map(r => ({
+    return results.map((r) => ({
       core_value: r.core_value,
-      count: r._count.id
+      count: r._count.id,
     }));
   }
 }

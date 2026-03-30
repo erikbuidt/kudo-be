@@ -2,7 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { CommentCreatedEvent, KudoCreatedEvent, ReactionToggledEvent } from '@/common/events/kudo.events';
+import {
+  CommentCreatedEvent,
+  KudoCreatedEvent,
+  ReactionToggledEvent,
+} from '@/common/events/kudo.events';
 import { NotificationsGateway } from './notifications.gateway';
 import { PrismaService } from '@/package/prisma/prisma.service';
 
@@ -14,7 +18,7 @@ export class NotificationsListener {
     @InjectQueue('notifications') private readonly notificationsQueue: Queue,
     private readonly notificationsGateway: NotificationsGateway,
     private readonly prisma: PrismaService,
-  ) { }
+  ) {}
 
   @OnEvent('kudo.created')
   async handleKudoCreated(event: KudoCreatedEvent) {
@@ -27,7 +31,7 @@ export class NotificationsListener {
       include: {
         sender: { select: { id: true, username: true, display_name: true } },
         receiver: { select: { id: true, username: true, display_name: true } },
-      }
+      },
     });
 
     if (kudo) {
@@ -46,7 +50,9 @@ export class NotificationsListener {
 
   @OnEvent('comment.created')
   async handleCommentCreated(event: CommentCreatedEvent) {
-    this.logger.log(`Comment created event handled for Kudo ID: ${event.kudoId}`);
+    this.logger.log(
+      `Comment created event handled for Kudo ID: ${event.kudoId}`,
+    );
 
     // 1. Simple Task: Potential broadcast if we had a comment-specific one
     // In current implementation, we might just want to refresh counts or similar
@@ -55,7 +61,7 @@ export class NotificationsListener {
     // We need to notify participants (sender and receiver, excluding the commenter)
     const kudo = await this.prisma.kudo.findUnique({
       where: { id: event.kudoId },
-      select: { sender_id: true, receiver_id: true }
+      select: { sender_id: true, receiver_id: true },
     });
 
     const user = await this.prisma.user.findUnique({
@@ -97,7 +103,7 @@ export class NotificationsListener {
       include: {
         sender: { select: { id: true, username: true, display_name: true } },
         receiver: { select: { id: true, username: true, display_name: true } },
-      }
+      },
     });
 
     const user = await this.prisma.user.findUnique({

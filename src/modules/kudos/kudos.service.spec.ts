@@ -3,7 +3,11 @@ import { KudosService } from './kudos.service';
 import { PrismaService } from '@/package/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CoreValue } from '@/generated/prisma/enums';
 
 describe('KudosService', () => {
@@ -60,27 +64,34 @@ describe('KudosService', () => {
     };
 
     it('should throw BadRequestException if sender is receiver', async () => {
-      await expect(service.createKudo(senderId, { ...dto, receiver_id: senderId }))
-        .rejects.toThrow(BadRequestException);
+      await expect(
+        service.createKudo(senderId, { ...dto, receiver_id: senderId }),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('should throw NotFoundException if sender not found', async () => {
       mockPrisma.user.findUnique.mockResolvedValueOnce(null);
-      await expect(service.createKudo(senderId, dto)).rejects.toThrow(NotFoundException);
+      await expect(service.createKudo(senderId, dto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw NotFoundException if receiver not found', async () => {
       mockPrisma.user.findUnique
         .mockResolvedValueOnce({ id: senderId, giving_budget: 100 }) // sender
         .mockResolvedValueOnce(null); // receiver
-      await expect(service.createKudo(senderId, dto)).rejects.toThrow(NotFoundException);
+      await expect(service.createKudo(senderId, dto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw ForbiddenException if insufficient budget', async () => {
       mockPrisma.user.findUnique
         .mockResolvedValueOnce({ id: senderId, giving_budget: 5 }) // sender
         .mockResolvedValueOnce({ id: dto.receiver_id }); // receiver
-      await expect(service.createKudo(senderId, dto)).rejects.toThrow(ForbiddenException);
+      await expect(service.createKudo(senderId, dto)).rejects.toThrow(
+        ForbiddenException,
+      );
     });
 
     it('should create kudo and emit event', async () => {
@@ -94,7 +105,10 @@ describe('KudosService', () => {
 
       expect(result).toEqual(mockKudo);
       expect(mockPrisma.user.update).toHaveBeenCalledTimes(2);
-      expect(mockEventEmitter.emit).toHaveBeenCalledWith('kudo.created', expect.any(Object));
+      expect(mockEventEmitter.emit).toHaveBeenCalledWith(
+        'kudo.created',
+        expect.any(Object),
+      );
     });
   });
 
@@ -109,8 +123,8 @@ describe('KudosService', () => {
           _count: { comments: 0, reactions: 0 },
           sender: { id: 's1', username: 'u1' },
           receiver: { id: 'r1', username: 'u2' },
-          reactions: []
-        }
+          reactions: [],
+        },
       ];
       mockPrisma.kudo.findMany.mockResolvedValueOnce(mockKudos);
       mockPrisma.kudo.count.mockResolvedValueOnce(1);
@@ -132,8 +146,8 @@ describe('KudosService', () => {
           _count: { comments: 0, reactions: 1 },
           sender: { id: 's1', username: 'u1' },
           receiver: { id: 'r1', username: 'u2' },
-          reactions: [{ id: 're-1' }]
-        }
+          reactions: [{ id: 're-1' }],
+        },
       ];
       mockPrisma.kudo.findMany.mockResolvedValueOnce(mockKudos);
       mockPrisma.kudo.count.mockResolvedValueOnce(1);
@@ -142,11 +156,13 @@ describe('KudosService', () => {
 
       expect(result.data).toHaveLength(1);
       expect(result.data[0].is_reacted).toBe(true);
-      expect(mockPrisma.kudo.findMany).toHaveBeenCalledWith(expect.objectContaining({
-        include: expect.objectContaining({
-          reactions: expect.any(Object)
-        })
-      }));
+      expect(mockPrisma.kudo.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          include: expect.objectContaining({
+            reactions: expect.any(Object),
+          }),
+        }),
+      );
     });
   });
 
@@ -155,7 +171,7 @@ describe('KudosService', () => {
       const mockKudo = {
         id: '1',
         _count: { comments: 1, reactions: 2 },
-        reactions: []
+        reactions: [],
       };
       mockPrisma.kudo.findUnique.mockResolvedValueOnce(mockKudo);
 
